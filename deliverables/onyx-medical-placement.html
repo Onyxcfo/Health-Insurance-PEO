@@ -1,0 +1,1233 @@
+<title>Onyx 2026 Medical Placement</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#F5F6F8;
+    --surface:#FFFFFF;
+    --surface-2:#EDEFF2;
+    --ink:#16181C;
+    --muted:#5C646E;
+    --faint:#828A94;
+    --rule:#DCE0E5;
+    --rule-strong:#B9C0C8;
+    --accent:#1D5B72;
+    --accent-soft:#E4EDF1;
+    --flag:#8F5714;
+    --flag-soft:#F6EDE1;
+    --good:#2C6B4F;
+    --good-soft:#E4EFE9;
+    --shadow:0 1px 2px rgba(22,24,28,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#14161A;
+      --surface:#1B1E23;
+      --surface-2:#22262C;
+      --ink:#E7EAED;
+      --muted:#9BA4AE;
+      --faint:#7A838D;
+      --rule:#2E333A;
+      --rule-strong:#414851;
+      --accent:#83B9CD;
+      --accent-soft:#1C2B33;
+      --flag:#D6A063;
+      --flag-soft:#2B2318;
+      --good:#77C39A;
+      --good-soft:#1A2620;
+      --shadow:none;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14161A;
+    --surface:#1B1E23;
+    --surface-2:#22262C;
+    --ink:#E7EAED;
+    --muted:#9BA4AE;
+    --faint:#7A838D;
+    --rule:#2E333A;
+    --rule-strong:#414851;
+    --accent:#83B9CD;
+    --accent-soft:#1C2B33;
+    --flag:#D6A063;
+    --flag-soft:#2B2318;
+    --good:#77C39A;
+    --good-soft:#1A2620;
+    --shadow:none;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:44px 28px 96px;display:flex;flex-direction:column;gap:52px}
+  .prose{max-width:68ch}
+
+  h1,h2,h3{font-family:Newsreader,Georgia,serif;font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+  h1{font-size:clamp(30px,4.4vw,46px);line-height:1.1}
+  h2{font-size:26px;line-height:1.2}
+  h3{font-size:18px;line-height:1.3}
+  p{margin:0}
+  strong{font-weight:600}
+  em{font-style:italic}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  }
+  .mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* ---- masthead ---- */
+  header.masthead{border-bottom:2px solid var(--ink);padding-bottom:26px;display:flex;flex-direction:column;gap:18px}
+  .mast-top{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:baseline}
+  .lede{color:var(--muted);font-size:16.5px;max-width:62ch}
+  .provenance{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+    gap:1px;background:var(--rule);border:1px solid var(--rule);
+  }
+  .prov{background:var(--surface);padding:11px 13px;display:flex;flex-direction:column;gap:3px}
+  .prov dt{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+  .prov dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:12px;font-variant-numeric:tabular-nums}
+
+  /* ---- sections ---- */
+  section{display:flex;flex-direction:column;gap:20px}
+  .sec-head{display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--rule-strong);padding-top:14px}
+
+  /* ---- verdict ---- */
+  .verdict{
+    background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);
+    padding:24px 26px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);
+  }
+  .verdict h2{font-size:22px}
+
+  .ranks{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:14px}
+  .rank{background:var(--surface);border:1px solid var(--rule);padding:16px 17px;display:flex;flex-direction:column;gap:8px}
+  .rank.lead{border-color:var(--accent);background:var(--accent-soft)}
+  .rank-top{display:flex;align-items:center;gap:10px}
+  .pos{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+    width:22px;height:22px;flex:none;display:grid;place-items:center;
+    border:1px solid var(--rule-strong);color:var(--muted);
+  }
+  .rank.lead .pos{border-color:var(--accent);color:var(--accent)}
+  .rank-name{font-family:Newsreader,Georgia,serif;font-size:17px;font-weight:600}
+  .rank-fig{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .rank p{font-size:13.5px;color:var(--muted);line-height:1.5}
+
+  /* ---- tables ---- */
+  .scroll{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  caption{
+    caption-side:top;text-align:left;padding:13px 15px;background:var(--surface-2);
+    border-bottom:1px solid var(--rule);font-size:13px;
+  }
+  caption b{font-family:Newsreader,Georgia,serif;font-size:15.5px;font-weight:600}
+  caption .cap-meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+  thead th{
+    font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:500;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--faint);white-space:nowrap;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .plan{min-width:184px}
+  .plan b{font-weight:600}
+  .tagline{display:block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:2px}
+  /* "not documented" inside a table cell — must NOT change the cell's display */
+  td.nd{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+  .cell-main{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cell-sub{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:1px}
+  tr.total td{background:var(--surface-2);font-weight:600;border-top:1px solid var(--rule-strong)}
+  .best{color:var(--good);font-weight:600}
+  .worst{color:var(--flag);font-weight:600}
+  .hsa{
+    font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.08em;
+    border:1px solid var(--rule-strong);padding:1px 4px;color:var(--muted);margin-left:5px;white-space:nowrap;
+  }
+  .tag{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.09em;
+    text-transform:uppercase;padding:2px 6px;white-space:nowrap;
+  }
+  .tag.req{background:var(--surface-2);color:var(--muted);border:1px solid var(--rule-strong)}
+  .tag.opt{background:var(--flag-soft);color:var(--flag);border:1px solid var(--flag)}
+  .tag.gap{background:var(--surface-2);color:var(--faint);border:1px dashed var(--rule-strong)}
+
+  /* ---- employees ---- */
+  .people{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .person{background:var(--surface);padding:20px 22px;display:grid;grid-template-columns:210px minmax(0,1fr);gap:22px}
+  @media (max-width:760px){.person{grid-template-columns:1fr;gap:12px}}
+  .who{display:flex;flex-direction:column;gap:4px}
+  .who .nm{font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:600;line-height:1.15}
+  .who .meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;line-height:1.55}
+  .picks{display:flex;flex-direction:column;gap:9px}
+  .pick{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;font-size:13.5px;align-items:baseline}
+  @media (max-width:560px){.pick{grid-template-columns:1fr;gap:2px}}
+  .pick .lbl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+  .note{font-size:13.5px;color:var(--muted);line-height:1.55;border-top:1px dotted var(--rule-strong);padding-top:9px}
+  .note b{color:var(--ink)}
+
+  /* ---- lists ---- */
+  ul.clean{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
+  /* Plain block list items: grid/flex here would split "<b>lead</b> trailing text"
+     into separate items and push the text into the marker column. */
+  ul.clean>li{position:relative;padding-left:18px;font-size:14px;line-height:1.55}
+  ul.clean>li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;background:var(--rule-strong)}
+  ul.clean.flagged>li::before{background:var(--flag)}
+
+  .cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px}
+  .panel{background:var(--surface);border:1px solid var(--rule);padding:20px 22px;display:flex;flex-direction:column;gap:13px}
+  .panel h3{padding-bottom:9px;border-bottom:1px solid var(--rule)}
+
+  .timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(184px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .tl{background:var(--surface);padding:14px 15px;display:flex;flex-direction:column;gap:5px}
+  .tl .d{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums}
+  .tl .w{font-size:13px;color:var(--muted);line-height:1.45}
+
+  footer{border-top:1px solid var(--rule-strong);padding-top:18px;color:var(--faint);font-size:12px;display:flex;flex-direction:column;gap:5px}
+  .key{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);line-height:1.7}
+  a{color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="mast-top">
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div class="eyebrow">Medical Benefits Placement &middot; Prepared for Steven Nikolov</div>
+        <h1>2026 Medical Placement:<br>Four Bids, Re&#8209;Rated</h1>
+      </div>
+    </div>
+    <p class="lede">Every vendor quoted Onyx on a census that isn't ours. This report re-prices all four bids
+      against actual enrollment &mdash; four enrolled, ten covered lives &mdash; so the numbers compare.
+      Onyx's contribution target of $300 / $600 / $1,000 is applied throughout.</p>
+    <dl class="provenance">
+      <div class="prov"><dt>Effective date</dt><dd>10/01/2026</dd></div>
+      <div class="prov"><dt>Enrolling</dt><dd>4 of 5 &middot; 10 lives</dd></div>
+      <div class="prov"><dt>Gross payroll</dt><dd>$658,322</dd></div>
+      <div class="prov"><dt>TriNet quote</dt><dd>Q-00412887</dd></div>
+      <div class="prov"><dt>Insperity bid</dt><dd>8143360-11</dd></div>
+      <div class="prov"><dt>Angle quote</dt><dd>400798</dd></div>
+    </dl>
+  </header>
+
+  <!-- ================= VERDICT ================= -->
+  <section>
+    <div class="verdict">
+      <div class="eyebrow">The bottom line</div>
+      <h2>Angle offers the best coverage at the lowest cost. Among the PEOs, it's ADP.</h2>
+      <p class="prose">Angle Health wins on every measurable axis in year one &mdash; better plan designs, lower
+        employee cost, and $12,181 less employer spend than the cheapest PEO. It carries two risks the PEOs
+        don't: a renewal you expect at <strong>+40%</strong>, and a scope gap (no payroll, HR, workers' comp or
+        EPLI) that nobody has priced. If Onyx wants one vendor for everything, <strong>ADP TotalSource</strong>
+        is the answer &mdash; cheapest all-in, the lowest contribution floor in the field, the only vendor that
+        lets us curate the plan menu, and the single best plan design on any PEO's shelf.</p>
+    </div>
+
+    <div class="sec-head">
+      <div class="eyebrow">Ranking &middot; all four bidders</div>
+      <h3>Best coverage per dollar</h3>
+    </div>
+    <div class="ranks">
+      <div class="rank lead">
+        <div class="rank-top"><span class="pos">1</span><span class="rank-name">Angle Health</span></div>
+        <div class="rank-fig">$34,800 employer &middot; via CapFi</div>
+        <p>Best designs in the field and the cheapest for everyone. A $1,000-deductible plan with a $2,000
+          out-of-pocket max costs a family $694/mo &mdash; less than the PEOs charge for mid-tier coverage.
+          Held back only by renewal risk and unpriced scope.</p>
+      </div>
+      <div class="rank">
+        <div class="rank-top"><span class="pos">2</span><span class="rank-name">ADP TotalSource</span></div>
+        <div class="rank-fig">$46,981 year 1 &middot; floor $187.02</div>
+        <p>Cheapest PEO all-in, lowest floor, and the only vendor where we pick the lineup. Its
+          EPO&nbsp;HDHP&nbsp;2500-100Copay is the best plan any PEO offers.</p>
+      </div>
+      <div class="rank">
+        <div class="rank-top"><span class="pos">3</span><span class="rank-name">TriNet / Aetna</span></div>
+        <div class="rank-fig">$51,591 year 1 &middot; floor $269.50</div>
+        <p>Deepest menu at 16 plans and a broad POS network, but a $14,400 admin floor and mid-tier premiums
+          running $6,000&ndash;$12,000 above ADP's equivalents.</p>
+      </div>
+      <div class="rank">
+        <div class="rank-top"><span class="pos">4</span><span class="rank-name">Insperity Saver</span></div>
+        <div class="rank-fig">$53,436 year 1 &middot; floor $509.76</div>
+        <p>Now the most expensive of the three <em>and</em> the weakest coverage. Highest floor forces Onyx
+          above target, and its cheapest plan still runs $604/mo employee-only.</p>
+      </div>
+    </div>
+
+    <div class="cols2">
+      <div class="panel">
+        <h3>Why ADP beats TriNet</h3>
+        <ul class="clean">
+          <li><b>$4,610 less</b> in year-one employer cost.</li>
+          <li>Floor of <b>$187.02</b> vs $269.50 &mdash; both clear our $300 target, but ADP leaves the most room.</li>
+          <li>Its $2,500-deductible plan caps a member at <b>$3,500</b> and pays <b>100%</b> after deductible.
+            TriNet's closest rung has a $6,850 cap. <em>But see the household-by-household comparison &mdash; for
+            the two family tiers TriNet's ACO 6500 beats it.</em></li>
+          <li>ADP's fee is 1.53% of payroll and stays below TriNet's $14,400 floor until payroll reaches
+            <b>~$941,000</b>.</li>
+          <li>ADP lets us present 3&ndash;5 plans. TriNet and Insperity require the full menu.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Why TriNet beats Insperity</h3>
+        <ul class="clean">
+          <li>TriNet is <b>$1,845 cheaper</b> in year one &mdash; and Insperity's life and LTD rates were never
+            quoted, so its real figure is higher still.</li>
+          <li>Insperity's cheapest plan &mdash; a $6,500 deductible at $604/mo &mdash; costs more than TriNet's
+            <b>richest mid-tier</b> plans.</li>
+          <li>Insperity's floor of $509.76 pushes Onyx <b>$2,517 above</b> the contribution target and buys
+            Lisa a $5,000-deductible plan for it.</li>
+          <li>Insperity offers <b>seven rungs to TriNet's sixteen</b>, and its two cheapest carry the highest
+            out-of-pocket maximums in the field &mdash; $9,200 and $8,500 for an individual.</li>
+          <li>Every Insperity plan costs a family more than <b>$871/mo</b> after Onyx's $1,000 &mdash; more than ADP's
+            mid-tier plans charge, on a $6,500 deductible.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EMPLOYER COST ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Onyx cost &middot; employee share excluded</div>
+      <h2>What Onyx pays, required versus optional</h2>
+    </div>
+    <p class="prose">The medical contribution line is <em>plan-independent</em> &mdash; it is our contribution
+      formula, not any vendor's price, and it does not move when an employee changes plans. Only a vendor's
+      floor can override it, which happens at Insperity alone.</p>
+
+    <div class="scroll">
+      <table>
+        <caption><b>Employer-only annual cost</b> &nbsp;<span class="cap-meta">4 enrolled &middot; contribution $300 / $600 / $1,000</span></caption>
+        <thead>
+          <tr>
+            <th>Cost line</th><th>Status</th>
+            <th class="n">ADP</th><th class="n">Insperity <em>(Saver)</em></th><th class="n">TriNet / Aetna</th><th class="n">Angle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Medical &mdash; contribution floor</td><td><span class="tag req">Required</span></td>
+            <td class="n">$8,977</td><td class="n">$24,468</td><td class="n">$12,936</td><td class="n">$10,537</td>
+          </tr>
+          <tr>
+            <td>Medical &mdash; our spend above floor</td><td><span class="tag opt">Optional</span></td>
+            <td class="n">$25,823</td><td class="n">$12,849</td><td class="n">$21,864</td><td class="n">$24,263</td>
+          </tr>
+          <tr>
+            <td>Admin / service fee</td><td><span class="tag req">Required</span></td>
+            <td class="n">$10,072<span class="cell-sub">1.53% of payroll</span></td>
+            <td class="n">$10,980<span class="cell-sub">$183 PEPM</span></td>
+            <td class="n">$14,400<span class="cell-sub">$1,200/mo minimum &mdash; see note</span></td>
+            <td class="n">&mdash;<span class="cell-sub">none disclosed</span></td>
+          </tr>
+          <tr>
+            <td>Workers' comp <span class="cell-sub" style="display:block">EPLI included at all three</span></td>
+            <td><span class="tag req">Required</span></td>
+            <td class="n">$0<span class="cell-sub">inside the 1.53% fee</span></td>
+            <td class="n">~$994<span class="cell-sub">estimated &mdash; see note</span></td>
+            <td class="n">$324<span class="cell-sub">0.044 / 0.087 per $100</span></td>
+            <td class="n"><span class="tag gap">Own policy needed</span></td>
+          </tr>
+          <tr>
+            <td>Dental + vision</td>
+            <td><span class="tag opt">Optional</span> <span class="tag req">Req at Insperity</span></td>
+            <td class="n">$0<span class="cell-sub">"can be employee all paid"</span></td>
+            <td class="n">$1,320<span class="cell-sub">$27.50 PEPM minimum &times; 4</span></td>
+            <td class="n">$0<span class="cell-sub">no funding required</span></td>
+            <td class="n"><span class="tag gap">Not offered</span></td>
+          </tr>
+          <tr>
+            <td>Basic life &amp; AD&amp;D</td>
+            <td><span class="tag opt">Opt at ADP</span> <span class="tag req">Req at TriNet</span></td>
+            <td class="n">$72<span class="cell-sub">elective &mdash; ADP confirmed</span></td>
+            <td class="n"><span class="tag gap">Not quoted</span></td>
+            <td class="n">$67<span class="cell-sub">"$10,000 required"</span></td>
+            <td class="n"><span class="tag gap">Not offered</span></td>
+          </tr>
+          <tr>
+            <td>Long-term disability</td>
+            <td><span class="tag opt">Optional</span></td>
+            <td class="n">$137<span class="cell-sub">elective &mdash; ADP confirmed</span></td>
+            <td class="n"><span class="tag gap">Not quoted</span></td>
+            <td class="n">$625<span class="cell-sub">avoidable &mdash; EE-paid option exists</span></td>
+            <td class="n"><span class="tag gap">Not offered</span></td>
+          </tr>
+          <tr>
+            <td>One-time setup</td><td><span class="tag req">Required</span></td>
+            <td class="n">$1,900</td><td class="n">$2,825</td><td class="n">$1,375</td>
+            <td class="n"><span class="tag gap">Not disclosed</span></td>
+          </tr>
+          <tr class="total">
+            <td>Year 1 as modeled</td><td></td>
+            <td class="n best">$46,981</td><td class="n worst">$53,436</td><td class="n">$51,591</td><td class="n best">$34,800</td>
+          </tr>
+          <tr class="total">
+            <td>Year 1 stripped to required only</td><td></td>
+            <td class="n best">$20,949</td><td class="n worst">$40,588</td><td class="n">$29,102</td><td class="n">$10,537</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="clean flagged">
+      <li><b>Angle's total is not a like-for-like comparison.</b> It is medical only. To stand next to the PEO
+        columns it still needs standalone dental/vision, life, LTD, workers' compensation, and payroll/HR/EPLI,
+        plus a setup fee nobody has quoted. Those rows are blank because the product doesn't include them
+        &mdash; not because they are free. One piece of that gap is already a real, known cost: <b>Onyx pays
+        for outside HR support today</b>, which all three PEOs absorb and Angle does not. That figure belongs
+        in this comparison once we have it.</li>
+      <li><b>Insperity's floor alone ($24,468) exceeds ADP's entire required year-one cost ($20,949).</b> That
+        gap is structural &mdash; a 75% funding rule against a more expensive menu &mdash; and no contribution
+        decision on our side closes it.</li>
+      <li><b>TriNet is the only vendor that requires employer-paid life insurance</b> &mdash; its own worksheet
+        reads "$10,000 required." <b>ADP has confirmed that its basic life and LTD are elective.</b> Both lines
+        are kept in the total because our benefit design calls for employer-paid life and long-term disability,
+        but dropping them would take <b>$209</b> off ADP's year one, bringing it to $46,772.</li>
+      <li><b>Insperity is the only vendor that makes us fund dental and vision.</b> Its
+        <b>$27.50 per employee per month is a minimum</b>, not a modeling choice &mdash; $1,320/yr assuming all
+        four medical enrollees opt in. ADP states outright that both "can be employee all paid," and TriNet
+        requires no funding either, so at both we can offer the benefit at <b>$0</b> and let employees fund it.
+        Funding it voluntarily at ADP or TriNet would cost the same $1,320, roughly 38% of the underlying
+        premium ($3,502 at ADP, $3,467 at TriNet).</li>
+      <li><b>Insperity applies a floor to ancillary benefits too, not just medical.</b> A 75% floor on medical
+        and a $27.50 floor on dental/vision. ADP and TriNet impose neither &mdash; we set the ancillary
+        contribution at whatever we choose, including nothing.</li>
+      <li><b>The $1,320 is settled at four opt-ins.</b> Insperity's benefit sheet allows dental and vision to
+        be elected independently of medical, so a fifth participant would have raised the minimum to $1,650
+        &mdash; but Josephine is declining dental and vision as well as medical.</li>
+      <li><b>Insperity's workers' comp is an estimate, not a quote.</b> Its bid allocates $938.52 across the
+        wrong census; re-rating it for Jessica in place of Elena, using the base-plus-rate pattern implied by
+        its own per-employee figures, gives roughly $994. Ask for the actual rates.</li>
+      <li><b>TriNet's own paperwork states its fee two different ways, and $3,240 turns on which one applies.</b>
+        The fee table in both the Executive Summary and the proposal deck prints an <b>Annual Total of
+        $11,160</b> (5 &times; $186 PEPM), with the $1,200/month minimum appearing only as an asterisk. TriNet's
+        own VROI model uses <b>$14,400</b> &mdash; their $54,367 total decomposes to workers' comp $301 +
+        medical $39,600 + life $67 + $14,400 exactly. We have modeled the minimum, because that is what they
+        priced. If it is waived or negotiated away, <b>TriNet's year one drops to $48,351 and ADP's lead falls
+        from $4,610 to $1,370</b> &mdash; close enough that TriNet's family plans, Electric IT, $0 employer
+        401(k) and full 12-month first year would likely decide it. <b>Worth getting in writing.</b></li>
+      <li><b>Our effective rate is $240 per employee per month, not the quoted $186</b> &mdash; the minimum
+        spreads $1,200 across five people, a 29% premium over the headline number. It self-clears at seven
+        employees, but that does not help: the fee then rises to $15,624.</li>
+      <li><b>The fee structures behave differently as we grow.</b> ADP's floats with payroll, so raises and
+        bonuses raise it. Insperity's is flat per head. TriNet's is a floor we sit under until a seventh hire.</li>
+    </ul>
+  </section>
+
+  <!-- ================= RENEWAL ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Year two &middot; matched deductible</div>
+      <h2>The renewal reverses Angle's advantage</h2>
+    </div>
+    <p class="prose">Compared at the same deductible on total medical premium. ADP and TriNet publish a 10%
+      trend assumption; Insperity's one-year agreements state none, so 10% is our assumption. Angle claims
+      renewals land under 10% &mdash; we are modeling your 40% expectation instead.</p>
+
+    <div class="scroll">
+      <table>
+        <caption><b>Total medical premium, year 1 to year 2</b> &nbsp;<span class="cap-meta">at actual enrollment</span></caption>
+        <thead>
+          <tr><th>Plan</th><th class="n">Deductible</th><th class="n">Year 1</th><th class="n">Year 2</th><th>Trend applied</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="plan"><b>Angle</b> HDHP 3400/5000</td><td class="n">$3,400</td><td class="n best">$48,996</td><td class="n worst">$68,594</td><td>+40% &mdash; your estimate</td></tr>
+          <tr><td class="plan"><b>ADP</b> Aetna EPO HDHP 3500</td><td class="n">$3,500</td><td class="n">$54,991</td><td class="n best">$60,490</td><td>+10% &mdash; ADP stated</td></tr>
+          <tr><td class="plan"><b>TriNet</b> Aetna HDHP 4000</td><td class="n">$4,000</td><td class="n">$55,488</td><td class="n">$61,037</td><td>+10% &mdash; TriNet VROI</td></tr>
+          <tr><td class="plan"><b>Insperity</b> UHC 3400 HDHP <em>(Saver base plan)</em></td><td class="n">$3,400</td><td class="n worst">$75,911</td><td class="n worst">$83,502</td><td>+10% &mdash; our assumption</td></tr>
+          <tr><td class="plan"><b>Insperity</b> UHC 3000 Primary Advantage</td><td class="n">$3,000</td><td class="n">$71,826</td><td class="n">$79,009</td><td>+10% &mdash; our assumption</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="clean">
+      <li>A <b>$6,000 advantage becomes an $8,000 disadvantage</b> in a single renewal. This is the only place
+        the ranking actually turns.</li>
+      <li>Two features compound the risk: Angle can <b>re-rate on a greater-than-10% enrollment swing</b>, and
+        at four subscribers one hire or departure is a 25% change. Its stop loss is
+        <b>aggregate-only</b> &mdash; there is no individual-claimant layer, so a single large claim is absorbed
+        inside our own funded amount before the carrier responds. That is precisely the mechanism that produces
+        a 40% renewal.</li>
+      <li><b>Insperity ranks fourth on premium regardless of trend.</b> Even after Angle's 40% renewal,
+        Insperity's year two still runs roughly $10,400 higher than Angle's worst case.</li>
+      <li><b>Insperity now has an exact match.</b> Its Independence Saver package carries a 3400 HDHP &mdash; the
+        same deductible as Angle's base plan &mdash; at <b>$75,911</b>, or $26,915 more than Angle for identical
+        deductible exposure.</li>
+    </ul>
+
+    <div class="panel">
+      <h3>The renewal <em>date</em> matters as much as the percentage</h3>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.55">The table above compares 12-month blocks.
+        That is not how all four vendors work. A plan year fixed to the carrier's calendar rather than to our
+        October 1 start means the first increase arrives early &mdash; and a second one lands inside 24 months.
+        All four dates are now confirmed directly with the vendors.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Vendor</th><th>Plan year</th><th class="n">First year</th><th>Basis</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>ADP</b></td><td class="worst">Renews 6/1/2027</td><td class="n worst">8 months</td>
+              <td>Documented &mdash; "Renewal Info 6/1/2027" on every plan card; VSP resets 6/1</td></tr>
+            <tr><td><b>Angle</b></td><td class="best">Renews 10/1/2027</td><td class="n best">12 months</td>
+              <td>Documented &mdash; "rates guaranteed for the 12-month contract period"</td></tr>
+            <tr><td><b>Insperity</b></td><td class="best">Renews 10/1/2027</td><td class="n best">12 months</td>
+              <td>Confirmed by Insperity &mdash; "we extend anniversary date renewals, so 12 months from your
+                effective date." Our earlier read of the "(1750 in 2027)" plan labels as a calendar plan year
+                was wrong; those are IRS deductible steps applied at the plan's own renewal.</td></tr>
+            <tr><td><b>TriNet</b></td><td class="best">Renews 10/1/2027</td><td class="n best">12 months</td>
+              <td>Confirmed by TriNet &mdash; renewals fall on "the 1st month of the quarter in which you
+                start," so a 10/1 start holds 10/1 in perpetuity. <b>Quarter-anchored, not anniversary-anchored:
+                an 11/1 start would renew 10/1/2027, giving only 11 months.</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="clean flagged">
+        <li><b>All four plan years are now confirmed, and ADP is the only one that does not give us a full
+          first year.</b> Over 24 months at the matched deductible: <b>TriNet $116,525</b> &middot;
+          <b>Angle $117,590</b> &middot; <b>ADP $119,331</b> &middot; <b>Insperity $159,412</b>. ADP is the only
+          vendor absorbing two increases in that window &mdash; which is why it lands behind Angle over two years
+          despite Angle taking a 40% renewal.</li>
+        <li><b>Protecting the October 1 date matters most for TriNet.</b> Its renewal is anchored to the quarter
+          we start in, not to our anniversary. Starting 10/1 locks 10/1 permanently; slipping to 11/1 would give
+          a first plan year of only <b>11 months</b> and pull the first increase forward.</li>
+        <li><b>A renewal lands mostly on employees, not on Onyx.</b> Because our contribution is a fixed dollar
+          amount per tier, premium increases flow to payroll deductions. Angle's 40% renewal is the sharpest
+          case: total premium rises $19,598, of which <b>Onyx absorbs $88</b> and <b>employees absorb $19,511</b>
+          &mdash; their combined cost goes from $14,196 to $33,707.</li>
+        <li><b>The one channel that can raise Onyx's cost at renewal is the floor</b>, since it is a percentage
+          of a rate that rises. After a 40% Angle renewal the floor reaches $307.32 and, for the first time,
+          exceeds our $300 employee-only target. TriNet's floor lands at $296.45 after 10% &mdash; just under.
+          Insperity's rises to $560.74, widening the override on Lisa.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= EMPLOYEE COST ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Employee cost &middot; after Onyx contribution</div>
+      <h2>What each plan costs our people</h2>
+    </div>
+    <p class="prose">Coinsurance is shown as the share <em>the plan pays</em> after the deductible;
+      office-visit, pharmacy and emergency-room figures are what <em>the member</em> pays.</p>
+    <p class="prose"><b>Reading the employee columns.</b> Each cell shows the monthly payroll deduction, then
+      the annual total broken into its two parts: <b>premium</b> (twelve months of deductions) and
+      <b>care</b> (the household's out-of-pocket maximum). These are separate pots of money &mdash; an
+      out-of-pocket maximum caps what you pay for treatment and <em>never</em> includes premiums &mdash; so
+      they add without overlapping. That is why a total can run two or three times the out-of-pocket maximum:
+      on the richer plans the premium is the larger half. Christine on ADP's OA&nbsp;MC&nbsp;1000 pays
+      $12,620 in premium against a $9,000 care cap; for Steven or Jessica on that plan premium is 65% of the
+      total.</p>
+
+    <div class="scroll">
+      <table>
+        <caption><b>ADP TotalSource</b> &mdash; Aetna &nbsp;<span class="cap-meta">curated lineup of 4 &middot; floor $187.02 &middot; Onyx $34,800/yr</span></caption>
+        <thead>
+          <tr>
+            <th class="plan">Plan</th><th class="n">Ded ind / fam</th><th class="n">OOP ind / fam</th>
+            <th class="n">Coins <em>(plan pays)</em></th><th class="n">PCP / Spec</th><th class="n">Rx 1/2/3</th><th class="n">ER</th>
+            <th class="n">Lisa</th><th class="n">Christine</th><th class="n">Steven &amp; Jessica <em>(ea.)</em></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="plan"><b>EPO 8000 ValueNT</b><span class="tagline">Floor-setter &mdash; not HSA-eligible</span></td>
+            <td class="n">$8,000 / $16,000</td><td class="n worst">$10,000 / $20,000</td><td class="n">80%</td>
+            <td class="n">$10 / $110</td><td class="n">$10 / $50&#7496; / $90&#7496;</td><td class="n">ded+20%</td>
+            <td class="n"><span class="cell-main best">$74/mo</span><span class="cell-sub">$888 premium + $10,000 care = $10,888</span></td>
+            <td class="n"><span class="cell-main">$204/mo</span><span class="cell-sub">$2,450 premium + $20,000 care = $22,450</span></td>
+            <td class="n"><span class="cell-main">$160/mo</span><span class="cell-sub">$1,914 premium + $20,000 care = $21,914</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>EPO HDHP 3500-80%</b><span class="hsa">HSA</span></td>
+            <td class="n">$3,500 / $7,000</td><td class="n">$6,350 / $12,700</td><td class="n">80%</td>
+            <td class="n">20%&#7496;</td><td class="n">$10&#7496; / $45&#7496; / $70&#7496;</td><td class="n">ded+20%</td>
+            <td class="n"><span class="cell-main">$190/mo</span><span class="cell-sub">$2,281 premium + $6,350 care = $8,631</span></td>
+            <td class="n"><span class="cell-main">$454/mo</span><span class="cell-sub">$5,445 premium + $12,700 care = $18,145</span></td>
+            <td class="n"><span class="cell-main">$519/mo</span><span class="cell-sub">$6,232 premium + $12,700 care = $18,932</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>EPO HDHP 2500-100Copay</b><span class="hsa">HSA</span><span class="tagline">Best protection for Lisa and Christine</span></td>
+            <td class="n">$2,500 / $5,000</td><td class="n best">$3,500 / $7,000</td><td class="n best">100%</td>
+            <td class="n">$30&#7496; / $60&#7496;</td><td class="n">$10&#7496; / $45&#7496; / $70&#7496;</td><td class="n">ded+$350</td>
+            <td class="n"><span class="cell-main">$307/mo</span><span class="cell-sub">$3,682 premium + $3,500 care = $7,182</span></td>
+            <td class="n"><span class="cell-main">$705/mo</span><span class="cell-sub">$8,457 premium + $7,000 care = $15,457</span></td>
+            <td class="n"><span class="cell-main">$881/mo</span><span class="cell-sub">$10,575 premium + $7,000 care = $17,575</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>NATIONAL OA MC 1000-80%</b><span class="tagline">Only lineup plan with out-of-network</span></td>
+            <td class="n">$1,000 / $2,000</td><td class="n">$4,500 / $9,000</td><td class="n">80%</td>
+            <td class="n">$25 / $50</td><td class="n">$10 / $45 / $70</td><td class="n">$500</td>
+            <td class="n"><span class="cell-main">$468/mo</span><span class="cell-sub">$5,619 premium + $4,500 care = $10,119</span></td>
+            <td class="n"><span class="cell-main">$1,052/mo</span><span class="cell-sub">$12,620 premium + $9,000 care = $21,620</span></td>
+            <td class="n"><span class="cell-main">$1,381/mo</span><span class="cell-sub">$16,578 premium + $9,000 care = $25,578</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption><b>TriNet</b> &mdash; Aetna &nbsp;<span class="cap-meta">4 rungs of 16 offered &middot; floor $269.50 &middot; Onyx $34,800/yr</span></caption>
+        <thead>
+          <tr>
+            <th class="plan">Plan</th><th class="n">Ded ind / fam</th><th class="n">OOP ind / fam</th>
+            <th class="n">Coins <em>(plan pays)</em></th><th class="n">PCP / Spec</th><th class="n">Rx 1/2/3</th><th class="n">ER</th>
+            <th class="n">Lisa</th><th class="n">Christine</th><th class="n">Steven &amp; Jessica <em>(ea.)</em></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="plan"><b>Aetna ACO 6500 AZ</b><span class="tagline">Banner network only &mdash; floor-setter</span></td>
+            <td class="n">$6,500 / $13,000</td><td class="n">$7,500 / $15,000</td><td class="n">100%</td>
+            <td class="n">$25 / $65</td><td class="n">$10 / $45 / $80</td><td class="n">0%&#7496;</td>
+            <td class="n"><span class="cell-main best">$85/mo</span><span class="cell-sub">$1,020 premium + $7,500 care = $8,520</span></td>
+            <td class="n"><span class="cell-main">$289/mo</span><span class="cell-sub">$3,468 premium + $15,000 care = $18,468</span></td>
+            <td class="n"><span class="cell-main">$166/mo</span><span class="cell-sub">$1,992 premium + $15,000 care = $16,992</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>Aetna HDHP 4000</b><span class="hsa">HSA</span></td>
+            <td class="n">$4,000 / $8,000</td><td class="n">$6,850 / $13,700</td><td class="n">80%</td>
+            <td class="n">20%&#7496;</td><td class="n">$10&#7496; / $45&#7496; / $70&#7496;</td><td class="n">20%&#7496;</td>
+            <td class="n"><span class="cell-main">$194/mo</span><span class="cell-sub">$2,328 premium + $6,850 care = $9,178</span></td>
+            <td class="n"><span class="cell-main">$540/mo</span><span class="cell-sub">$6,480 premium + $13,700 care = $20,180</span></td>
+            <td class="n"><span class="cell-main">$495/mo</span><span class="cell-sub">$5,940 premium + $13,700 care = $19,640</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>Aetna PPO 2000</b></td>
+            <td class="n">$2,000 / $4,000</td><td class="n">$6,850 / $13,700</td><td class="n">80%</td>
+            <td class="n">$30 / $60</td><td class="n">$10 / $45 / $70</td><td class="n">$500</td>
+            <td class="n"><span class="cell-main">$332/mo</span><span class="cell-sub">$3,984 premium + $6,850 care = $10,834</span></td>
+            <td class="n"><span class="cell-main">$860/mo</span><span class="cell-sub">$10,320 premium + $13,700 care = $24,020</span></td>
+            <td class="n"><span class="cell-main">$915/mo</span><span class="cell-sub">$10,980 premium + $13,700 care = $24,680</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>Aetna PPO 750</b><span class="tagline">Richest rung shown</span></td>
+            <td class="n">$750 / $1,500</td><td class="n">$4,000 / $8,000</td><td class="n">90%</td>
+            <td class="n">$25 / $50</td><td class="n">$10 / $45 / $70</td><td class="n">$350</td>
+            <td class="n"><span class="cell-main">$443/mo</span><span class="cell-sub">$5,316 premium + $4,000 care = $9,316</span></td>
+            <td class="n"><span class="cell-main">$1,117/mo</span><span class="cell-sub">$13,404 premium + $8,000 care = $21,404</span></td>
+            <td class="n"><span class="cell-main">$1,252/mo</span><span class="cell-sub">$15,024 premium + $8,000 care = $23,024</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption><b>Insperity &mdash; Independence Saver</b> &nbsp;<span class="cap-meta">UnitedHealthcare &middot; all 7 rungs offered &middot; floor $509.76 &middot; Onyx $37,317/yr</span></caption>
+        <thead>
+          <tr>
+            <th class="plan">Plan</th><th class="n">Ded ind / fam</th><th class="n">OOP ind / fam</th>
+            <th class="n">Coins <em>(plan pays)</em></th><th class="n">PCP / Spec</th><th class="n">Rx 1/2/3</th><th class="n">ER</th>
+            <th class="n">Lisa</th><th class="n">Christine</th><th class="n">Steven &amp; Jessica <em>(ea.)</em></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="plan"><b>UHC 6500 Primary Advantage</b><span class="tagline">Cheapest in either package</span></td>
+            <td class="n">$6,500 / $13,000</td><td class="n worst">$9,200 / $18,400</td><td class="n">100%</td>
+            <td class="n"><span class="best">$0</span> / $100</td><td class="n">$5 / $50 / $100</td><td class="n">$250+ded</td>
+            <td class="n"><span class="cell-main best">$94/mo</span><span class="cell-sub">$1,126 premium + $9,200 care = $10,326</span></td>
+            <td class="n"><span class="cell-main">$667/mo</span><span class="cell-sub">$8,009 premium + $18,400 care = $26,409</span></td>
+            <td class="n"><span class="cell-main">$871/mo</span><span class="cell-sub">$10,456 premium + $18,400 care = $28,856</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>UHC 5000 HDHP</b><span class="hsa">HSA</span></td>
+            <td class="n">$5,000 / $10,000</td><td class="n">$7,150 / $14,300</td><td class="n">80%</td>
+            <td class="n">20%&#7496;</td><td class="n">$10&#7496; / $35&#7496; / $60&#7496;</td><td class="n">20%&#7496;</td>
+            <td class="n"><span class="cell-main">$108/mo</span><span class="cell-sub">$1,292 premium + $7,150 care = $8,442</span></td>
+            <td class="n"><span class="cell-main">$694/mo</span><span class="cell-sub">$8,322 premium + $14,300 care = $22,622</span></td>
+            <td class="n"><span class="cell-main">$914/mo</span><span class="cell-sub">$10,963 premium + $14,300 care = $25,263</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>UHC 3000 Primary Advantage</b><span class="tagline">Best value on the menu</span></td>
+            <td class="n">$3,000 / $6,000</td><td class="n">$6,500 / $13,000</td><td class="n">80%</td>
+            <td class="n"><span class="best">$0</span> / $100</td><td class="n">$5 / $50 / $100</td><td class="n">$250+ded+20%</td>
+            <td class="n"><span class="cell-main">$135/mo</span><span class="cell-sub">$1,615 premium + $6,500 care = $8,115</span></td>
+            <td class="n"><span class="cell-main">$751/mo</span><span class="cell-sub">$9,014 premium + $13,000 care = $22,014</span></td>
+            <td class="n"><span class="cell-main">$995/mo</span><span class="cell-sub">$11,940 premium + $13,000 care = $24,940</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>UHC 3400 HDHP</b><span class="hsa">HSA</span><span class="tagline">Base plan &mdash; sets the $509.76 floor</span></td>
+            <td class="n">$3,400 / $6,800</td><td class="n">$7,000 / $14,000</td><td class="n">90%</td>
+            <td class="n">10%&#7496;</td><td class="n">$10&#7496; / $35&#7496; / $60&#7496;</td><td class="n">10%&#7496;</td>
+            <td class="n"><span class="cell-main">$170/mo</span><span class="cell-sub">$2,039 premium + $7,000 care = $9,039</span></td>
+            <td class="n"><span class="cell-main">$826/mo</span><span class="cell-sub">$9,908 premium + $14,000 care = $23,908</span></td>
+            <td class="n"><span class="cell-main">$1,110/mo</span><span class="cell-sub">$13,323 premium + $14,000 care = $27,323</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>UHC 4000 Choice Plus</b><span class="tagline">Worst family exposure in the field</span></td>
+            <td class="n">$4,000 / $8,000</td><td class="n worst">$8,500 / $17,000</td><td class="n">100%</td>
+            <td class="n">$35 / $65</td><td class="n">$10 / $45 / $70</td><td class="n">$500</td>
+            <td class="n"><span class="cell-main">$242/mo</span><span class="cell-sub">$2,906 premium + $8,500 care = $11,406</span></td>
+            <td class="n"><span class="cell-main">$974/mo</span><span class="cell-sub">$11,688 premium + $17,000 care = $28,688</span></td>
+            <td class="n"><span class="cell-main worst">$1,323/mo</span><span class="cell-sub">$15,877 premium + $17,000 care = $32,877</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>UHC 1700 HDHP</b><span class="hsa">HSA</span><span class="tagline">Best protection on the menu</span></td>
+            <td class="n">$1,700 / $3,400</td><td class="n best">$4,500 / $9,000</td><td class="n">90%</td>
+            <td class="n">10%&#7496;</td><td class="n">$10&#7496; / $35&#7496; / $60&#7496;</td><td class="n">10%&#7496;</td>
+            <td class="n"><span class="cell-main">$314/mo</span><span class="cell-sub">$3,772 premium + $4,500 care = $8,272</span></td>
+            <td class="n"><span class="cell-main">$1,131/mo</span><span class="cell-sub">$13,578 premium + $9,000 care = $22,578</span></td>
+            <td class="n"><span class="cell-main">$1,550/mo</span><span class="cell-sub">$18,597 premium + $9,000 care = $27,597</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>UHC 1000 Choice Plus</b><span class="tagline">Richest rung</span></td>
+            <td class="n">$1,000 / $3,000</td><td class="n">$5,000 / $10,000</td><td class="n">80%</td>
+            <td class="n">$35 / $65</td><td class="n">$10 / $40 / $65</td><td class="n">$250</td>
+            <td class="n"><span class="cell-main">$338/mo</span><span class="cell-sub">$4,058 premium + $5,000 care = $9,058</span></td>
+            <td class="n"><span class="cell-main">$1,179/mo</span><span class="cell-sub">$14,149 premium + $10,000 care = $24,149</span></td>
+            <td class="n"><span class="cell-main worst">$1,624/mo</span><span class="cell-sub">$19,491 premium + $10,000 care = $29,491</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="clean flagged">
+      <li><b>One Insperity cost the table does not show:</b> its Choice Plus and Primary Advantage options
+        carry a <b>separate prescription deductible</b> &mdash; $150 to $250 per individual, $450 to $600 per
+        family &mdash; before pharmacy copays begin. On the Primary Advantage plans it applies to Tiers 3 and 4
+        only; on Choice Plus the Benefits At A Glance does not specify which tiers. No other vendor's plans
+        here carry a separate Rx deductible.</li>
+      <li><b>Insperity's plan designs are now fully documented</b> &mdash; all seven Saver rungs, from its own
+        Benefits At A Glance. Nothing in this table is inferred.</li>
+      <li><b>Its ladder is worse than it looks at the low end.</b> The 6500 Primary Advantage carries a
+        <b>$9,200 individual and $18,400 family</b> out-of-pocket maximum, and the 4000 Choice Plus carries
+        <b>$8,500 / $17,000</b> &mdash; the highest family exposure of any plan in the field, ADP's
+        $8,000-deductible plan included.</li>
+      <li><b>Its best plan is genuinely good and genuinely expensive.</b> The 1700 HDHP caps a member at $4,500
+        and a family at $9,000, but costs Christine $1,131/mo and each family $1,550/mo after Onyx's
+        contribution &mdash; roughly double what Angle's richest plan costs them.</li>
+      <li><b>Choosing Select instead would cost Onyx $2,208 more a year.</b> Its base plan is the 2000
+        Deductible, so the floor rises to $646.90 and overrides <em>both</em> Lisa's $300 and Christine's $600
+        &mdash; $39,526 against Saver's $37,317.</li>
+    </ul>
+
+    <div class="scroll">
+      <table>
+        <caption><b>Angle Health</b> &mdash; level funded, Cigna PPO network &nbsp;<span class="cap-meta">all 3 plans &middot; floor $219.52 &middot; Onyx $34,800/yr</span></caption>
+        <thead>
+          <tr>
+            <th class="plan">Plan</th><th class="n">Ded ind / fam</th><th class="n">OOP ind / fam</th>
+            <th class="n">Coins <em>(plan pays)</em></th><th class="n">PCP / Spec</th><th class="n">Rx 1/2</th><th class="n">ER</th>
+            <th class="n">Lisa</th><th class="n">Christine</th><th class="n">Steven &amp; Jessica <em>(ea.)</em></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="plan"><b>ANG HDHP 3400/5000</b><span class="hsa">HSA</span><span class="tagline">CapFi's recommended base plan</span></td>
+            <td class="n">$3,400 / $6,800</td><td class="n">$5,000 / $10,000</td><td class="n">80%</td>
+            <td class="n">20%&#7496;</td><td class="n">20%&#7496;</td><td class="n">20%&#7496;</td>
+            <td class="n"><span class="cell-main">$139/mo</span><span class="cell-sub">$1,668 premium + $5,000 care = $6,668</span></td>
+            <td class="n"><span class="cell-main best">$322/mo</span><span class="cell-sub">$3,864 premium + $10,000 care = $13,864</span></td>
+            <td class="n"><span class="cell-main">$361/mo</span><span class="cell-sub">$4,332 premium + $10,000 care = $14,332</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>ANG TRAD 2000/4000</b><span class="tagline">Tier rates derived &mdash; confirm with CapFi</span></td>
+            <td class="n">$2,000 / $4,000</td><td class="n">$4,000 / $8,000</td><td class="n">80%</td>
+            <td class="n">$20 / $50</td><td class="n">$20 / $60</td><td class="n">$250</td>
+            <td class="n"><span class="cell-main">$192/mo</span><span class="cell-sub">$2,305 premium + $4,000 care = $6,305</span></td>
+            <td class="n"><span class="cell-main">$433/mo</span><span class="cell-sub">$5,201 premium + $8,000 care = $13,201</span></td>
+            <td class="n"><span class="cell-main">$526/mo</span><span class="cell-sub">$6,306 premium + $8,000 care = $14,306</span></td>
+          </tr>
+          <tr>
+            <td class="plan"><b>ANG TRAD 1000/2000</b><span class="tagline">Best design in the field</span></td>
+            <td class="n best">$1,000 / $2,000</td><td class="n best">$2,000 / $4,000</td><td class="n">80%</td>
+            <td class="n best">$10 / $30</td><td class="n best">$10 / $30</td><td class="n">$200</td>
+            <td class="n"><span class="cell-main">$246/mo</span><span class="cell-sub">$2,956 premium + $2,000 care = <b class="best">$4,956</b></span></td>
+            <td class="n"><span class="cell-main">$547/mo</span><span class="cell-sub">$6,567 premium + $4,000 care = <b class="best">$10,567</b></span></td>
+            <td class="n"><span class="cell-main">$694/mo</span><span class="cell-sub">$8,323 premium + $4,000 care = <b class="best">$12,323</b></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+        <div class="panel">
+      <h3>No single PEO is best for everyone</h3>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.55">ADP leads on employer cost and holds the
+        lowest payroll deduction for all three households &mdash; but that is its 8000 ValueNT, which carries the
+        field's worst individual exposure and no HSA. Judged on what each household would actually elect, the
+        answer splits.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Household</th><th>Lowest worst-case exposure</th><th>Best value</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Lisa</b><span class="cell-sub" style="display:block">employee only</span></td>
+              <td><b>ADP</b> HDHP 2500-100Copay<span class="cell-sub">$307/mo &middot; worst $7,182</span></td>
+              <td><b>Insperity</b> 3000 Primary Advantage<span class="cell-sub">$135/mo &middot; worst $8,115 &mdash; $2,067/yr less for $933 more exposure</span></td>
+            </tr>
+            <tr>
+              <td><b>Christine</b><span class="cell-sub" style="display:block">employee + spouse</span></td>
+              <td class="best"><b>ADP</b> HDHP 2500-100Copay<span class="cell-sub">$705/mo &middot; worst $15,457</span></td>
+              <td><b>TriNet</b> ACO 6500<span class="cell-sub">$289/mo &middot; worst $18,468</span></td>
+            </tr>
+            <tr>
+              <td><b>Steven &amp; Jessica</b><span class="cell-sub" style="display:block">family</span></td>
+              <td class="best"><b>TriNet</b> ACO 6500<span class="cell-sub">$166/mo &middot; worst $16,992</span></td>
+              <td class="best"><b>TriNet</b> ACO 6500<span class="cell-sub">wins on both axes</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="clean flagged">
+        <li><b>For the two family tiers, TriNet's ACO 6500 is the best plan in the PEO field on both axes</b>
+          &mdash; $166/mo, within $6 of ADP's cheapest plan, and a worst case $583 <em>below</em> ADP's best.
+          That single plan is the strongest argument against treating ADP as best for everyone.</li>
+        <li><b>ADP is decisively best for Christine.</b> Its 2500-100Copay caps her household at $15,457;
+          TriNet's best for her is $18,468 and Insperity's is $22,014 &mdash; $6,557 worse.</li>
+        <li><b>Insperity is best for exactly one person.</b> Lisa's 3000 Primary Advantage is genuinely good
+          value, but only because Onyx is forced to overpay $209.76/month on her behalf. That is the floor
+          working in her favor and against Onyx.</li>
+        <li><b>Two caveats before anyone elects the ACO 6500.</b> It sits on <b>Banner Health Network only</b>,
+          so provider access is narrower than the rest of TriNet's menu. And worst case is not a typical year:
+          it carries a <b>$13,000 family deductible</b> with office copays before the deductible and 100%
+          coverage after, while ADP's 2500-100Copay has a $5,000 family deductible but applies it to office
+          visits. The ACO 6500 is better for routine care and for a catastrophic year; ADP's plan is better
+          through the middle.</li>
+      </ul>
+    </div>
+
+    <ul class="clean">
+
+      <li><b>Lowest deduction is not lowest risk.</b> Lisa pays $74/mo on ADP's 8000 ValueNT but carries
+        $10,888 of exposure. On Angle's TRAD 2000/4000 she pays $192 and her exposure drops to
+        $6,305 &mdash; $4,583 less risk for $1,417 more premium.</li>
+      <li><b>Angle's richest plan costs a family $694/mo</b> &mdash; less than what all three PEOs charge for
+        mid-tier coverage, with a $1,000 deductible instead of $2,500&ndash;$5,000.</li>
+      <li><b>Insperity's low-end number is an illusion.</b> Lisa's $108/mo looks competitive only because the
+        floor forces Onyx to overpay $209.76/month on her behalf, and it buys her a $5,000-deductible plan.
+        Christine and both families pay the highest deductions in the field on that same plan.</li>
+      <li><b>HSAs are noted, not modeled &mdash; by choice.</b> The [HSA] tag marks which plans are
+        HSA-qualified and changes no figure in this report. Worst case is 12 months of payroll deductions plus
+        the household out-of-pocket maximum, with no employer seed, no employee contribution and no credit for
+        the tax deduction on HSA dollars. We cannot know what any individual will choose to contribute, and
+        building an assumption about that into the numbers would hide the guess rather than remove it. The
+        effect is that these figures <b>overstate the true cost of the HDHP options</b> relative to the copay
+        plans, since HDHP spending can be funded pre-tax and copay-plan spending cannot. Two things worth
+        knowing when reading the HDHP rows: ADP's 8000 ValueNT is <b>not</b> HSA-eligible &mdash; it pays $10
+        primary-care and Tier 1 copays before the deductible &mdash; so its $10,000 exposure has no pre-tax
+        offset at all; and on every plan here the family out-of-pocket maximum exceeds one year's HSA
+        contribution limit, so the offset is partial in year one and depends on accumulated balance.</li>
+      <li><b>Out-of-network is ADP's one structural weakness</b> &mdash; ten of its twelve plans cover nothing
+        out of network. We have judged this immaterial: no out-of-state work travel, and Arizona has adequate
+        in-network access. One national plan is kept in the lineup regardless.</li>
+    </ul>
+  </section>
+
+  <!-- ================= PEOPLE ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Employee by employee</div>
+      <h2>The right plan for each person</h2>
+    </div>
+
+    <div class="people">
+
+      <div class="person">
+        <div class="who">
+          <div class="nm">Lisa Danforth</div>
+          <div class="meta">$178,094 &middot; Employee only<br>Highest-paid non-owner</div>
+        </div>
+        <div class="picks">
+          <div class="pick"><span class="lbl">Best overall</span><span><b>Angle TRAD 2000/4000</b> &mdash; $192/mo, worst case $6,305. Lowest risk-adjusted cost available to her.</span></div>
+          <div class="pick"><span class="lbl">Best at a PEO</span><span><b>ADP EPO HDHP 3500</b> &mdash; $190/mo, essentially the same premium as Angle, but $2,326 more exposure. For real protection, <b>ADP EPO HDHP 2500-100Copay</b> at $307/mo caps her at $7,182 and pays 100% after deductible.</span></div>
+          <div class="pick"><span class="lbl">Avoid</span><span>ADP 8000 ValueNT despite the $74/mo. It belongs on the menu to hold our floor at $187.02 &mdash; not on her enrollment form.</span></div>
+          <div class="note">With no dependents and the highest non-owner salary, an <b>HSA-qualified plan is worth
+            more to Lisa than to anyone else</b> &mdash; her deduction lands at the top marginal rate. She is
+            also the reason Insperity's floor bites: her $300 tier is forced to $509.76, costing Onyx
+            <b>$2,517 a year</b> for a $5,000-deductible plan.</div>
+        </div>
+      </div>
+
+      <div class="person">
+        <div class="who">
+          <div class="nm">Christine Johnson</div>
+          <div class="meta">$79,228 &middot; Employee + spouse<br>Affordability pressure point</div>
+        </div>
+        <div class="picks">
+          <div class="pick"><span class="lbl">Best overall</span><span><b>Angle HDHP 3400/5000</b> &mdash; $322/mo, or <b>4.9% of gross pay</b>.</span></div>
+          <div class="pick"><span class="lbl">Best at a PEO</span><span><b>ADP EPO HDHP 3500</b> &mdash; $454/mo, 6.9% of pay. TriNet's closest is 8.2%; Insperity's cheapest plan is <b>10.5%</b>.</span></div>
+          <div class="pick"><span class="lbl">Consider</span><span>Raising the employee+spouse contribution from $600 to roughly <b>$678</b> &mdash; about $930 a year &mdash; to bring her subsidy in line with the family tier.</span></div>
+          <div class="note">Christine carries the lowest salary and the second-highest premium tier, so she feels
+            the deduction hardest. Worth knowing: <b>our $600 tier subsidizes her less than the family tier
+            does.</b> On Angle's base plan Onyx covers 73% of each family premium and 68% of Lisa's, but only
+            <b>65% of Christine's</b>. The ACA employer mandate and its affordability test <b>do not apply to
+            Onyx</b> at five employees &mdash; this is a retention and fairness judgment, not a compliance one.</div>
+        </div>
+      </div>
+
+      <div class="person">
+        <div class="who">
+          <div class="nm">Steven Nikolov</div>
+          <div class="meta">$186,000 &middot; Family<br>100% owner &middot; S-corp</div>
+        </div>
+        <div class="picks">
+          <div class="pick"><span class="lbl">Best overall</span><span><b>Angle TRAD 1000/2000</b> &mdash; $694/mo, worst case $12,323. The lowest family exposure anywhere in the field.</span></div>
+          <div class="pick"><span class="lbl">Best at a PEO</span><span><b>ADP EPO HDHP 2500-100Copay</b> &mdash; $881/mo, worst case $17,575. The best family protection any PEO offers.</span></div>
+          <div class="pick"><span class="lbl">Tax note</span><span>Under <b>IRC &sect;1372</b>, as a greater-than-2% shareholder you cannot run premiums pretax through the cafeteria plan.</span></div>
+          <div class="note">Your $1,000 employer contribution is reported as W-2 wages, and you take the
+            self-employed health insurance deduction instead; your own share is likewise after-tax at payroll.
+            Practical effect: <b>you lose the payroll-tax savings the other three receive</b>, so every premium
+            dollar costs you more in real terms than it costs them. An HSA still works, but funded personally
+            and deducted above the line rather than through the plan &mdash; confirm the mechanics with the tax
+            preparer. This treatment applies to you alone &mdash; <b>Lisa, Christine and Jessica enroll pretax
+            normally.</b></div>
+        </div>
+      </div>
+
+      <div class="person">
+        <div class="who">
+          <div class="nm">Jessica B.</div>
+          <div class="meta">$135,000 &middot; Family<br>New hire</div>
+        </div>
+        <div class="picks">
+          <div class="pick"><span class="lbl">Best overall</span><span><b>Angle HDHP 3400/5000</b> at $361/mo for the lowest deduction, or <b>TRAD 1000/2000</b> at $694/mo for the best protection her family can buy.</span></div>
+          <div class="pick"><span class="lbl">Best at a PEO</span><span><b>ADP EPO HDHP 3500</b> at $519/mo, or <b>2500-100Copay</b> at $881/mo.</span></div>
+          <div class="pick"><span class="lbl">Open item</span><span>Her eligibility date against the October 1 effective date is <b>unconfirmed</b>. New-hire waiting periods differ by vendor.</span></div>
+          <div class="note">Her enrollment runs fully pretax. Same tier and same rates as Steven &mdash; but her
+            <b>effective cost is lower than his for the identical plan</b>, since she keeps the payroll-tax
+            advantage he cannot use.</div>
+        </div>
+      </div>
+
+      <div class="person">
+        <div class="who">
+          <div class="nm">Josephine Mack</div>
+          <div class="meta">$80,000 &middot; Waives medical, dental and vision<br>Covered for life &amp; LTD</div>
+        </div>
+        <div class="picks">
+          <div class="pick"><span class="lbl">Action</span><span>A <b>signed waiver</b> needs to be on file before the effective date.</span></div>
+          <div class="pick"><span class="lbl">If she enrolls</span><span>It would be <b>family</b> coverage, so Onyx cost rises <b>$12,000/yr</b> &mdash; the same at all four vendors, since no floor reaches the $1,000 family tier.</span></div>
+          <div class="note">She is included in employer-paid life and LTD, which is why those lines cover five
+            employees rather than four. Two consequences worth flagging on the Angle option: adding a fifth
+            subscriber is a <b>25% enrollment change</b>, which exceeds the 10% swing that lets Angle re-rate
+            mid-term &mdash; and a family enrollment adds several covered lives to a six-member level-funded
+            pool, which is a materially bigger underwriting change than one more single employee.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ADDED VALUE ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Beyond medical &middot; PEOs only</div>
+      <h2>What else each PEO brings</h2>
+    </div>
+    <p class="prose">Angle is excluded here &mdash; it sells medical only, so there is nothing to compare.
+      Every entry below comes from what the vendor actually put in writing. <em>Not documented</em> means the
+      vendor may well offer it but has not said so in anything we hold. Relevance is judged against Onyx as it
+      is: five employees, one state, an office with no meaningful OSHA exposure, a CPA firm, and a prospective
+      TriNet referral partner.</p>
+
+    <div class="scroll">
+      <table>
+        <caption><b>Non-medical capabilities</b> &nbsp;<span class="cap-meta">from vendor documents only</span></caption>
+        <thead>
+          <tr>
+            <th>Capability</th><th>TriNet</th><th>ADP TotalSource</th><th>Insperity</th><th>Relevance to Onyx</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" style="background:var(--surface-2);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)">Risk and compliance</td></tr>
+          <tr>
+            <td>EPLI</td><td><b>$1,000,000 stated</b></td><td>included, limit not stated</td>
+            <td>bundled with WC, limit not stated</td><td>High</td>
+          </tr>
+          <tr>
+            <td>Workers' compensation</td><td>0.044 / 0.087 rates disclosed</td><td>folded into service fee</td>
+            <td>bundled, $939 allocation</td><td>Low &mdash; office exposure</td>
+          </tr>
+          <tr>
+            <td>Outside employment counsel</td><td>Fisher Phillips at <b>negotiated rates</b>; hotline included</td>
+            <td>HR Investigation Team</td><td class="nd">not documented</td><td>Medium</td>
+          </tr>
+          <tr>
+            <td>Handbook and policy review</td><td><b>included</b></td>
+            <td><b>included</b> &mdash; ADP confirmed</td>
+            <td class="nd">not documented</td><td>Medium &mdash; handbook already in place</td>
+          </tr>
+          <tr>
+            <td>Accreditation</td><td>ESAC; 30-yr public company</td><td class="nd">not stated</td>
+            <td><b>IRS-certified CPEO</b></td><td>Medium</td>
+          </tr>
+
+          <tr><td colspan="5" style="background:var(--surface-2);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)">Service model</td></tr>
+          <tr>
+            <td>Named service roles</td><td>employee specialists, 24/7 chat</td>
+            <td><b>8 named roles</b> &mdash; HR BP, Payroll BP, Risk &amp; Safety, Benefits, Investigations, Tax, WC Claims, MyLife</td>
+            <td>one designated HR specialist</td><td>High &mdash; displaces paid outside HR support</td>
+          </tr>
+          <tr>
+            <td>Claims and billing advocacy</td><td class="nd">not documented</td>
+            <td><b>Health Advocate</b></td><td class="nd">not documented</td><td>High &mdash; HDHP-heavy menus</td>
+          </tr>
+
+          <tr><td colspan="5" style="background:var(--surface-2);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)">Technology</td></tr>
+          <tr>
+            <td>IT support</td><td>Electric &mdash; basic tier included, <b>upgrades unpriced</b></td>
+            <td><b>none offered</b></td><td class="nd">not documented</td>
+            <td>See note below</td>
+          </tr>
+          <tr>
+            <td>Expense management</td><td>TriNetExpense &mdash; <b>T&amp;E only</b>, QBO integration</td>
+            <td class="nd">not documented</td><td class="nd">not documented</td>
+            <td>Low &mdash; does not replace AP</td>
+          </tr>
+          <tr>
+            <td>Time and attendance</td><td>TriNetTime</td><td class="nd">not documented</td>
+            <td class="nd">not documented</td><td>None &mdash; keeping Harvest</td>
+          </tr>
+          <tr>
+            <td>Applicant tracking / postings</td><td><b>TriNetHire</b> &mdash; unlimited jobs, Indeed, Glassdoor, Monster</td>
+            <td>job postings</td><td>recruiting claimed, no detail</td><td>Medium</td>
+          </tr>
+          <tr>
+            <td>Performance management</td><td>TriNetPerform + DocuSign</td><td class="nd">not documented</td>
+            <td>claimed, no detail</td><td>Low at five people</td>
+          </tr>
+          <tr>
+            <td>Learning and training</td><td>TriNetLearn; harassment and HR 101 training</td>
+            <td><b>Learning Academy</b> (payroll, tax, comp, HR analytics certifications) + Workforce&nbsp;Now LMS &mdash; <em>inclusion unconfirmed</em></td>
+            <td>training claimed, no detail</td><td>High &mdash; administrator development</td>
+          </tr>
+          <tr>
+            <td>Document mgmt / certification tracking</td><td>Box-backed, certification tracking</td>
+            <td>LMS compliance tracking</td><td class="nd">not documented</td><td>Medium &mdash; CPE tracking</td>
+          </tr>
+          <tr>
+            <td>Accounting integrations</td><td>QuickBooks Online, Xero, Intacct, NetSuite</td>
+            <td>ADP Marketplace catalog</td><td class="nd">not documented</td><td>High &mdash; CPA firm</td>
+          </tr>
+
+          <tr><td colspan="5" style="background:var(--surface-2);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)">Employee experience</td></tr>
+          <tr>
+            <td>Discount marketplace</td>
+            <td><b>TriNet Perks</b> &mdash; thousands of national and local deals: gym, phone carriers, travel, tickets, auto, technology. Onyx can post its own offers.</td>
+            <td>real-estate discount only &mdash; <b>no marketplace</b></td>
+            <td class="nd">not documented</td><td>Medium</td>
+          </tr>
+          <tr>
+            <td>Voluntary insurance shelf</td><td>pet, legal, commuter, disability, EAP</td>
+            <td><b>widest</b> &mdash; hospital indemnity, critical illness, accident, group legal, auto/home, pet, ID theft, term life, AD&amp;D</td>
+            <td>dental and vision only in file</td><td>High &mdash; patches HDHP gaps</td>
+          </tr>
+          <tr>
+            <td>Benefits decision support</td><td><b>Healthee &mdash; fee waived</b></td>
+            <td class="nd">not documented</td><td class="nd">not documented</td>
+            <td>High &mdash; 16-plan menu</td>
+          </tr>
+          <tr>
+            <td>Total compensation statements</td><td><b>included</b></td><td class="nd">not documented</td>
+            <td class="nd">not documented</td><td>High &mdash; $8,700/person unseen</td>
+          </tr>
+          <tr>
+            <td>Compensation benchmarking</td><td>included with workforce analytics</td><td>reporting and analytics</td>
+            <td>workforce reporting</td><td>Medium</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cols2">
+      <div class="panel">
+        <h3>Not applicable at five employees</h3>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.55">Several headline inclusions carry no
+          internal value for Onyx as it stands: <b>EEO-1 reporting</b> (not required below 100 employees),
+          <b>multi-state PTO guidance</b> (Arizona only), <b>international hiring and contractor payments</b>,
+          the <b>401(k) annual independent audit</b> (not required under 100 participants), and
+          <b>DEI workshops for supervisors</b>. TriNet's proposal also sells an "industry specific solution
+          tailored for nonprofits" and expense tagging to "grants or programs" &mdash; recycled content that
+          does not describe Onyx.</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.55">One qualification: TriNet is pitching
+          Onyx as a <b>referral partner</b>, so its full catalog has business-development value even where it
+          has no internal use. That is revenue-side, and deliberately excluded from the cost tables.</p>
+      </div>
+      <div class="panel">
+        <h3>Why IT support is not credited to TriNet</h3>
+        <ul class="clean flagged">
+          <li><b>There is no current spend to offset.</b> Onyx pays nothing for IT today, so Electric reduces a
+            future cost we have not committed to &mdash; it is not a saving against ADP.</li>
+          <li><b>The tier that solves the problem is the priced one.</b> Electric's basic plan is not expected
+            to be sufficient, and upgrade pricing is still open. That is simply buying IT support, which can be
+            bought from anyone.</li>
+          <li><b>It couples two decisions that should stay separate.</b> Leaving TriNet later would also mean
+            re-contracting IT.</li>
+          <li><b>Security requirements should drive that choice.</b> As a tax preparer Onyx falls under the FTC
+            Safeguards Rule and needs a written information security plan per IRS Pub 4557. Whether a provider
+            supports that matters more than whether it is bundled with payroll. <em>Confirm the basic tier even
+            qualifies before treating it as a benefit.</em></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 401K ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Retirement &middot; the one line where TriNet wins on cost</div>
+      <h2>401(k): TriNet charges Onyx nothing</h2>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption><b>401(k) comparison</b> &nbsp;<span class="cap-meta">modeled at 5 participants</span></caption>
+        <thead>
+          <tr><th>Item</th><th>TriNet &mdash; Empower</th><th>Insperity &mdash; Goldman Sachs AM</th><th>ADP</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Structure</td><td>Multiple employer plan; TriNet is sponsor and <b>3(16)</b> administrator, with a <b>3(21)</b> investment fiduciary</td>
+            <td>Insperity is sponsor and secures the trustee; GSAM selects and monitors investments</td>
+            <td class="nd">nothing provided</td>
+          </tr>
+          <tr><td>Employer setup</td><td class="best"><b>$0</b></td><td>$600 startup / $1,000 takeover</td><td class="nd">unknown</td></tr>
+          <tr><td>Employer recurring</td><td class="best"><b>$0</b></td><td>$50/mo base + $3 per participant = <b>$780/yr</b></td><td class="nd">unknown</td></tr>
+          <tr><td>Participant fee</td><td>$5.25/mo &mdash; <b>$63/yr</b></td><td class="best">$3.50/mo &mdash; <b>$42/yr</b></td><td class="nd">unknown</td></tr>
+          <tr><td>Exit fee</td><td>$1,000</td><td>$1,200</td><td class="nd">unknown</td></tr>
+          <tr><td>Fund expense ratios</td><td>"0.14% average" &mdash; <b>lineup not disclosed</b></td>
+            <td class="best">fully disclosed &mdash; target-date 0.06%, S&amp;P 500 index 0.01%, active 0.30&ndash;0.80%</td>
+            <td class="nd">unknown</td></tr>
+          <tr><td>Watch for</td><td><b>$150/hour</b> for match, profit-sharing and true-up allocations; $150 per amendment</td>
+            <td>$500 per additional compliance test; $400 per extra asset transfer</td><td class="nd">unknown</td></tr>
+          <tr class="total"><td>All-in recurring, 5 participants</td><td class="best">$315/yr</td><td>$990/yr</td><td class="nd">unknown</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="clean">
+      <li><b>TriNet costs Onyx nothing and shifts the whole recurring cost to participants.</b> Insperity's own
+        flyer criticizes exactly that model &mdash; "costs are shared between clients and participants rather
+        than participants bearing all the costs" &mdash; and the criticism is accurate.</li>
+      <li><b>The expense-ratio question is unresolved.</b> TriNet's 0.14% average beats Insperity's unweighted
+        lineup average of roughly 0.30%, but Insperity's <b>default target-date option is 0.06%</b> and its index
+        core runs 0.01&ndash;0.07%. Most small plans default into target-date funds, so Insperity likely wins
+        where it matters &mdash; but TriNet discloses no lineup, so this cannot be settled.</li>
+      <li><b>An October 1 TriNet 401(k) start is not achievable.</b> Their process needs roughly 45 days from the
+        installation kit, documents signed about 30 days before the effective date, and adoption only on the
+        first of a month. Earliest realistic date is <b>November 1</b>, so retirement will lag medical by at
+        least a month.</li>
+      <li><b>SECURE 2.0 credits are available if Onyx starts fresh:</b> up to $5,000/yr in start-up expense
+        credit for three years, $500/yr for automatic enrollment, and up to $1,000 per employee for employer
+        contributions. Statutory and vendor-independent &mdash; confirm eligibility with the tax preparer.</li>
+    </ul>
+
+    <div class="verdict">
+      <div class="eyebrow">Value verdict</div>
+      <h2>ADP on value, and the margin is wider than the soft benefits can close.</h2>
+      <p class="prose">TriNet has the deepest documented catalog and five capabilities nobody else offers
+        &mdash; Perks, Total Comp Statements, Healthee, TriNetExpense and $0 employer 401(k) cost. Against that,
+        <b>ADP is $4,610 a year cheaper with better plan designs</b>, and the gap narrows only to about $3,830
+        even if ADP's 401(k) fees land near Insperity's. Once IT support is set aside &mdash; it is new money
+        either way &mdash; TriNet's remaining edge is real but unpriced convenience, not cost. Insperity
+        finishes third: category parity on services, worst coverage, highest floor, and the only 401(k) that
+        bills the employer.</p>
+    </div>
+  </section>
+
+  <!-- ================= DATA QUALITY ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Method and data quality</div>
+      <h2>How these numbers were built</h2>
+    </div>
+    <div class="cols2">
+      <div class="panel">
+        <h3>Every bid was re-rated</h3>
+        <ul class="clean flagged">
+          <li><b>No vendor priced Onyx's actual group.</b> TriNet and Insperity both quoted Elena Nikolov at
+            $41,600 with Jessica absent, on $564,922 of payroll. Angle priced three employee-only and one
+            family, six members. ADP used $628,680 of payroll against our actual $658,322.</li>
+          <li>Every figure here was <b>re-priced by us</b> to actual enrollment &mdash; Lisa employee-only,
+            Christine employee+spouse, Steven and Jessica family, Josephine waiving &mdash; using each vendor's
+            published tier rates.</li>
+          <li><b>The model validates against source.</b> It reproduces Insperity's own published employee
+            contributions to the penny: $107.68 on the 5000 HDHP and $134.58 on the 3000 Primary Advantage.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Known gaps, carried not filled</h3>
+        <ul class="clean flagged">
+          <li><b>Insperity's life and LTD rates were never quoted.</b> Its employer cost is therefore understated.
+            Its medical plan designs, by contrast, are now complete &mdash; all seven Saver rungs come from its
+            own Benefits At A Glance.</li>
+          <li><b>Angle discloses no broker or consulting fee.</b> Its "21% administration" line is the third-party
+            administrator's cost inside the premium, not a fee billed to Onyx. CapFi's own compensation is not
+            stated anywhere in the presentation.</li>
+          <li><b>Angle's TRAD 2000/4000 tier rates are derived</b> from the ratios in its two documented plans,
+            which reproduce both exactly. Confirm before quoting to employees.</li>
+          <li><b>TriNet's contribution floor is our derivation</b> &mdash; 70% of the cheapest employee-only rate.
+            It reconciles to the penny on both carriers TriNet quoted, but is not stated in writing by TriNet.</li>
+          <li><b>Insperity's floor mechanic is now confirmed in writing</b> and it is not what any of the earlier
+            quotes implied. The floor is <b>75% of the employee-only rate of each package's designated base
+            plan</b> &mdash; the 3400 HDHP under Saver ($679.68 &rarr; $509.76) and the 2000 Deductible under
+            Select ($862.53 &rarr; $646.90) &mdash; not 75% of the cheapest plan offered. Insperity also caps the
+            employer contribution at 100% of the elected plan's premium, which is why a floor above a plan's
+            full cost is not the impossibility it first appeared to be.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Open items before we can bind</h3>
+      <ul class="clean">
+        <li>Confirm TriNet's 70% floor rule in writing.</li>
+        <li><b>Ask TriNet which service fee applies at five employees &mdash; $930/month or $1,200/month</b>
+          &mdash; and whether the minimum is negotiable. Their fee table says $11,160/yr; their footnote and
+          their own model say $14,400. Worth $3,240/yr and it moves the recommendation.</li>
+        <li>Confirm Angle's TRAD 2000/4000 tier rates with CapFi, and ask for its setup fee.</li>
+        <li>Obtain Insperity's life and LTD rates, <b>and its actual workers' comp rates</b> &mdash; the $994
+          in this report is our estimate from its own per-employee allocations.</li>
+        <li><b>Decide whether Onyx funds ADP's basic life and LTD</b> now that ADP has confirmed both are
+          elective. Keeping them costs $209/yr; our stated benefit design includes them.</li>
+        <li><b>Decide whether Onyx funds dental and vision at ADP or TriNet.</b> Both permit $0, so it is a
+          straight policy choice worth $1,320/yr. At Insperity it is not a choice &mdash; the $27.50 minimum
+          applies.</li>
+        <li>Confirm Jessica's benefit eligibility date against October 1.</li>
+        <li>Collect Josephine's signed waiver.</li>
+        <li>Decide the employee+spouse contribution: hold at $600, or move to ~$678 to equalize Christine's subsidy.</li>
+        <li><b>Get ADP's 401(k) fee schedule</b> &mdash; recordkeeper, employer and participant fees, and fund
+          expense ratios. It is the last variable that could move the value ranking.</li>
+        <li>Ask TriNet for its <b>401(k) fund lineup and target-date expense ratio</b>. The "0.14% average"
+          claim is not comparable without it.</li>
+        <li>Ask Insperity for its <b>EPLI limit</b>, and whether recruiting, custom job descriptions, training
+          and performance management are inside the $183 PEPM or "nonstandard services" at extra cost.</li>
+        <li>Ask ADP whether <b>Workforce Now Learning is included in the 1.53%</b> or an add-on purchase.</li>
+        <li>Ask TriNet for <b>Electric upgrade tier pricing</b>. Unpriced, it cannot be counted as value.</li>
+        <li>Shop IT support independently, on security and service merits rather than as a PEO bundle.</li>
+        <li><b>Quantify what Onyx pays for outside HR support today.</b> All three PEOs absorb it and Angle
+          does not, so it is a real offset against the PEO fee and the largest priceable piece of Angle's
+          scope gap.</li>
+        <li>If Angle stays live, price standalone dental/vision, life, LTD, and payroll/HR/workers' comp/EPLI &mdash;
+          without those, its $34,800 is not comparable to the PEO totals.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="key">&#7496; = after deductible &nbsp;&middot;&nbsp; HSA = health savings account eligible
+      &nbsp;&middot;&nbsp; premium = 12 months of payroll deductions &nbsp;&middot;&nbsp; care = the household's
+      in-network out-of-pocket maximum, which caps treatment cost and never includes premium</div>
+    <div>Sources: TriNet Q-00412887 (Aetna and UHC strategies, 8/30/2026) &middot; TriNet VROI 8/30/2026 &middot;
+      ADP TotalSource financial analysis 8/27/2026 &middot; Insperity HR360 bid versions 8143360-11 and -12,
+      prepared 8/21/2026 &middot; CapFi Consulting / Angle Health quote 400798, underwritten 7/30/2026.</div>
+    <div>Prepared by Josephine Mack &middot; Onyx Accounting Group &middot; September 2, 2026. Figures re-rated
+      to actual enrollment; not an offer of insurance and not tax advice.</div>
+  </footer>
+
+</div>
