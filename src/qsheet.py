@@ -1,0 +1,161 @@
+# -*- coding: utf-8 -*-
+# TriNet diligence question sheet -> xlsx
+# g = at stake $/yr (None where not quantifiable), h = basis label
+Q = [
+# grp, pri, question, why, held, g, h, followup
+("1. Fees and what we must pay","Ask first",
+ "Which service fee applies to us at five employees - $930 a month or $1,200? Is the $1,200 minimum negotiable, and at what headcount do we stop paying a minimum and start paying per employee?",
+ "Your fee table produces $11,160 a year. Your footnote and your own cost model both produce $14,400.",
+ "$14,400 was decomposed out of TriNet's $54,367.45 total, so their model uses the higher figure.",
+ 3240,"Fee table vs. footnote","Get the applicable fee stated in the service agreement, not the proposal."),
+
+("1. Fees and what we must pay","Ask first",
+ "Is Josephine billed the service fee even though she waives medical, dental and vision?",
+ "Five on payroll, four enrolling. If the fee is per worksite employee rather than per enrollee, the per-head math we were shown is understated.",
+ "Nothing. Not addressed in any TriNet document we hold.",
+ None,"1 of 5 billable","Ask the same question about a future non-enrolling hire."),
+
+("1. Fees and what we must pay","Ask first",
+ "State your employer contribution requirement in writing. Confirm that fixed dollars of $300 employee-only / $600 employee+spouse / $600 employee+child(ren) / $1,000 family satisfies it on every plan on your menu.",
+ "We believe the rule is 70% of the employee-only rate of the cheapest plan offered - $269.50 against the ACO 6500's $385.",
+ "Nothing in writing. We derived 70% from TriNet's own published employee contributions; it reconciles to the penny on both carriers quoted but has never been stated.",
+ 34800,"Whole contribution design","If the rule differs, re-run the whole employee-cost model before quoting anything to staff."),
+
+("1. Fees and what we must pay","Ask first",
+ "Confirm in writing that Onyx may fund dental and vision at $0 and have employees pay 100%.",
+ "Our notes say we are not required to fund either. Insperity imposes a $27.50 per-enrollee minimum - we do not want to discover the same after signing.",
+ "Josephine's notes: 'dental we don't have to fund.' Not confirmed by TriNet in writing.",
+ 1320,"Ancillary funding choice","Get it in the agreement, not a verbal."),
+
+("1. Fees and what we must pay","Ask first",
+ "Basic life and long-term disability: what exactly is mandatory, at what rate, and must it cover all five employees or only the four taking medical?",
+ "TriNet is the only vendor of the four that requires employer-paid life. The all-five vs. four-enrollees difference is Josephine.",
+ "Requirement is documented; the rate was never quoted.",
+ None,"Rate not quoted","Get the per-$1,000 rate and the volume basis."),
+
+("1. Fees and what we must pay","High",
+ "Workers' compensation: what class codes do the 0.044 and 0.087 rates attach to? Is there a deposit, a minimum premium, or a year-end audit that can true up against us?",
+ "TriNet is the only vendor that disclosed comp rates, which we credit. We need to know the exposure is fixed.",
+ "We re-rated TriNet's own rates to Onyx's actual payroll and got $324/yr.",
+ 324,"Our re-rate of their rates","Confirm the class assignment for a CPA office in AZ."),
+
+("1. Fees and what we must pay","High",
+ "Is there a setup or implementation fee, and is it waivable?",
+ "Not stated anywhere in the quote. ADP and Insperity both disclosed theirs.",
+ "Nothing.",
+ None,"Unstated","Ask for it in writing either way, including $0."),
+
+("2. Renewal exposure","High",
+ "What did TriNet's Aetna book actually renew at on the last two 10/1 cycles?",
+ "The renewal mechanic is settled and we like it. We need the number, not the mechanic - the book average, not our hypothetical.",
+ "Allison Irwin confirmed: renewals fall on the 1st month of the quarter in which you start, so a 10/1 start holds 10/1 in perpetuity.",
+ None,"Year-two exposure","If they will not give a book average, ask for their published renewal range."),
+
+("2. Renewal exposure","High",
+ "Is there any cap, corridor or rate guarantee in the agreement, or is the renewal entirely at Aetna's discretion?",
+ "A large-group pooled rate is the main reason to be in a PEO at all. If there is no contractual limit on the increase, we need that said plainly so we can price the risk.",
+ "Nothing. No cap language in anything we hold.",
+ None,"Year-two exposure","Ask which contract section governs renewal pricing."),
+
+("2. Renewal exposure","Medium",
+ "Can you re-rate us mid-term, and what triggers it?",
+ "Two live scenarios: Josephine enrolls at family coverage, or we hire a sixth. Either is a 20-25% change in enrolled lives. Angle can re-rate on a 10% swing.",
+ "Nothing. Not addressed.",
+ 12000,"If Josephine enrolls","Get the enrollment-change threshold in writing."),
+
+("3. Before we quote plans to employees","High",
+ "Send the Banner Health Network Arizona provider directory. What happens for out-of-area and travel care?",
+ "The ACO 6500 is the best plan in the whole PEO field on our math - it wins both family tiers, and the plan pays 100% after deductible with a $15,000 family out-of-pocket cap. But it is a narrow network.",
+ "Network named in the quote; no provider list supplied. Steven's and Jessica's physicians are unverified against it.",
+ None,"Top-ranked plan at risk","If Banner does not hold their doctors, the top-ranked plan comes off the table and the ranking changes."),
+
+("3. Before we quote plans to employees","High",
+ "Do the Q-00412887 Aetna rates hold if we decline UHC entirely?",
+ "We are only considering Aetna. Confirm the rates were not contingent on the dual-carrier strategy.",
+ "Both carriers were quoted in one document; no statement either way on decoupling.",
+ None,"Rate validity","Get an Aetna-only rate confirmation before signing."),
+
+("3. Before we quote plans to employees","Medium",
+ "How many of the sixteen Aetna plans can we actually put in front of employees, and is there a minimum enrollment per plan?",
+ "Our notes say TriNet requires the full menu. If that is right it is a real advantage over a two-package structure - but only if there is no per-plan participation trap.",
+ "Notes say the full menu is required. Not confirmed in writing, and no participation rule stated.",
+ None,"Menu rule","Confirm whether a plan with one enrollee stays available at renewal."),
+
+("3. Before we quote plans to employees","Medium",
+ "What is the new-hire waiting period, and does Jessica have a benefit eligibility date on or before 10/1?",
+ "Jessica is a new hire enrolling at family coverage. If she is not eligible on 10/1 the first-year cost changes.",
+ "Nothing. Her eligibility date is unconfirmed at every vendor.",
+ None,"10/1 eligibility","Applies to ADP and Insperity too - ask all three."),
+
+("3. Before we quote plans to employees","Medium",
+ "On the HSA plans: who administers the account, what does it cost the employee, and can Onyx seed it?",
+ "Six of the sixteen plans are HSA-qualified, including the HDHP 6350 - the lowest total worst case of any PEO plan we modeled. Account fees change that answer.",
+ "No HSA administrator or fee disclosed. HSA funding is deliberately not modeled in our workbook - we cannot know what employees will choose to fund.",
+ None,"Account fees unknown","Get the custodian name and the monthly account fee."),
+
+("4. 401(k)","High",
+ "Send the fund lineup with expense ratios, and name the target-date series.",
+ "You disclose no lineup at all. The 0.14% average in your materials cannot be verified without it, and it is the figure that decides whether your 401(k) beats ADP's.",
+ "Empower as recordkeeper, TriNet as plan sponsor, and a 0.14% average with no holdings behind it.",
+ None,"0.14% unverified","Also ask for the target-date series' own expense ratio, not just the plan average."),
+
+("4. 401(k)","High",
+ "Confirm Onyx pays nothing - no recordkeeping, no advisory, no base fee - and disclose any per-participant flat dollar fee on top of fund expenses.",
+ "That is how we read your proposal, and it is currently your strongest advantage over Insperity, whose 401(k) bills the employer.",
+ "Our read of the TriNet proposal is $0 employer cost with all recurring cost on participants. Not explicitly confirmed.",
+ None,"$0 employer - our read","Get it as a fee disclosure, not a sales statement."),
+
+("4. 401(k)","High",
+ "As a multiple-employer plan where TriNet is the plan sponsor, does Onyx still qualify for the SECURE 2.0 startup and auto-enrollment credits?",
+ "A real question, not a rhetorical one. The credits are worth meaningful money to a five-person firm and the answer depends on the plan structure, not on us.",
+ "Nothing. Not addressed in any 401(k) material we hold.",
+ None,"Tax credits","If the answer is no, price the same question at ADP - it may favor a standalone plan."),
+
+("4. 401(k)","Medium",
+ "Earliest realistic effective date, plus eligibility, entry dates, and whether Steven as 100% owner creates a top-heavy problem.",
+ "Our read is that a 10/1 401(k) start alongside the medical is not achievable. Tell us the real date so we stop planning around it.",
+ "Our own assessment only. TriNet has not stated a timeline.",
+ None,"Timing","Decide whether the 401(k) is a 1/1/2027 project once we have the date."),
+
+("5. Services we are genuinely shopping","High",
+ "Electric IT: price the upgrade tiers above the basic plan, with real numbers.",
+ "We spend nothing on IT today and need it. Basic will not be enough for us. This is the only capability on TriNet's list that nobody else offers.",
+ "Electric is bundled at a basic tier. Upgrade pricing is entirely open.",
+ None,"New money either way","This is new spend regardless of vendor - price it standalone too, so we know the PEO markup."),
+
+("5. Services we are genuinely shopping","Medium",
+ "TriNetExpense / Ramp: what does it cost us, what does it cost our clients, and what does the referral arrangement pay?",
+ "We are moving toward Ramp. Our Bill.com account is free but our clients pay monthly - so client economics matter as much as ours.",
+ "Listed as an included capability. No pricing, no referral terms.",
+ None,"Client-facing","Get client pricing in writing - we would be recommending it."),
+
+("5. Services we are genuinely shopping","Medium",
+ "TriNet Perks: what is actually in the 'company Groupon', what does it cost, and is it live in Arizona?",
+ "Described verbally as discounted rental cars, gym memberships and other consumer offers. Real value to five employees is unknown until we see the catalog.",
+ "Verbal description only. No catalog, no vendor list, no cost.",
+ None,"Unpriced perk","Ask for the actual catalog, not a category list."),
+
+("5. Services we are genuinely shopping","Low",
+ "TriNetTime: can it be customized enough to replace Harvest?",
+ "Our read is probably not - our time tracking needs customization. Tell us if we are wrong.",
+ "Listed as an included capability. No customization detail.",
+ None,"Possible Harvest offset","If it cannot replace Harvest, stop counting it as value."),
+
+("5. Services we are genuinely shopping","Medium",
+ "What does the referral partnership agreement actually pay, and does participating in it affect our own pricing?",
+ "TriNet has given us their full scope specifically because they want us referring clients. We need the arrangement documented and the conflict named.",
+ "Verbal only. No agreement, no compensation schedule.",
+ None,"Conflict to document","Get the agreement before we sign the PEO contract, not after."),
+
+("6. Exit and liability","High",
+ "If we leave at a renewal: what notice is required, do we get claims and loss experience data, and does Aetna issue a certificate of prior coverage?",
+ "A PEO that will not hand back experience data makes the next shopping cycle blind. This is the question that decides how trapped we are.",
+ "Nothing. Termination terms not addressed in the proposal.",
+ None,"Exit terms","Ask the same of ADP and Insperity - it is a differentiator nobody has volunteered."),
+
+("6. Exit and liability","Medium",
+ "EPLI: is the $1,000,000 per claim or aggregate, and does it cover acts during the term after we terminate?",
+ "The limit is stated but the structure is not. Tail coverage is the part that matters if we ever leave.",
+ "'EPLI $1,000,000' stated in the TriNet materials. Limit structure not stated.",
+ None,"Coverage structure","Get the policy form or a certificate."),
+]

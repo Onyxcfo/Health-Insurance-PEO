@@ -1,0 +1,487 @@
+<title>TriNet Diligence Sheet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#15191C; --ink-2:#3A444A; --faint:#6E7A80;
+  --paper:#FCFCFB; --surface:#EFF2F3; --surface-2:#E4E9EA;
+  --rule:#D3DADC; --rule-strong:#9AA6AA;
+  --stake:#8E2F2A; --stake-bg:#F6E9E7;
+  --settled:#2C6560; --settled-bg:#E4EEEC;
+  --shadow:rgba(21,25,28,.07);
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EDEE; --ink-2:#B3BEC2; --faint:#7E8B90;
+    --paper:#121618; --surface:#1B2124; --surface-2:#232B2F;
+    --rule:#2E383C; --rule-strong:#4C595E;
+    --stake:#E0847C; --stake-bg:#33201E;
+    --settled:#79BDB4; --settled-bg:#162927;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EDEE; --ink-2:#B3BEC2; --faint:#7E8B90;
+  --paper:#121618; --surface:#1B2124; --surface-2:#232B2F;
+  --rule:#2E383C; --rule-strong:#4C595E;
+  --stake:#E0847C; --stake-bg:#33201E;
+  --settled:#79BDB4; --settled-bg:#162927;
+  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14.5px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px; margin:0 auto; padding:44px 30px 80px}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:2.5px solid var(--ink); padding-bottom:18px}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--faint);
+}
+h1{
+  font-family:Spectral,Georgia,serif; font-weight:700;
+  font-size:clamp(30px,5vw,42px); line-height:1.06; letter-spacing:-.015em;
+  margin:8px 0 10px; text-wrap:balance;
+}
+.dek{
+  font-family:Spectral,Georgia,serif; font-size:16.5px; line-height:1.5;
+  color:var(--ink-2); max-width:62ch; margin:0;
+}
+.dek em{color:var(--ink); font-style:italic}
+
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule);
+  margin-top:22px;
+}
+.fact{background:var(--paper); padding:9px 12px}
+.fact .k{
+  font-family:"JetBrains Mono",monospace; font-size:9px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--faint);
+  display:block; margin-bottom:3px;
+}
+.fact .v{font-size:13.5px; font-weight:600; line-height:1.3}
+
+/* ---------- stakes banner ---------- */
+.stakes{
+  margin-top:26px; border-left:3px solid var(--stake);
+  background:var(--stake-bg); padding:14px 18px;
+}
+.stakes h2{
+  font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--stake);
+  margin:0 0 7px;
+}
+.stakes p{margin:0; font-size:14px; color:var(--ink); max-width:66ch}
+.stakes b{font-weight:700}
+
+/* ---------- sections ---------- */
+section{margin-top:40px}
+.shead{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--rule-strong); padding-bottom:7px}
+.snum{
+  font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:700;
+  color:var(--stake); letter-spacing:.05em; flex:none;
+}
+.shead h2{
+  font-family:Spectral,Georgia,serif; font-size:21px; font-weight:600;
+  letter-spacing:-.01em; margin:0; flex:1 1 auto;
+}
+.shead .tag{
+  font-family:"JetBrains Mono",monospace; font-size:9px; font-weight:500;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--faint);
+  flex:none; text-align:right;
+}
+
+/* ---------- question rows ---------- */
+.q{
+  display:grid; grid-template-columns:26px 1fr 116px; gap:0 14px;
+  padding:16px 0 14px; border-bottom:1px solid var(--rule);
+}
+.q:last-child{border-bottom:none}
+.qn{
+  font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:700;
+  color:var(--rule-strong); padding-top:1px; font-variant-numeric:tabular-nums;
+}
+.qbody .ask{font-size:15px; font-weight:600; line-height:1.42; margin:0 0 6px; color:var(--ink)}
+.qbody .why{font-size:13.5px; color:var(--ink-2); margin:0; max-width:64ch}
+.qbody .why + .why{margin-top:5px}
+.qbody .held{
+  display:block; margin-top:7px; padding-left:9px;
+  border-left:2px solid var(--rule-strong);
+  font-size:12.5px; color:var(--faint); max-width:62ch;
+}
+.qbody .held b{color:var(--ink-2); font-weight:600}
+.rail{padding-top:2px; text-align:right}
+.chip{
+  display:inline-block; font-family:"JetBrains Mono",monospace;
+  font-size:11px; font-weight:700; letter-spacing:.02em;
+  padding:3px 7px; border:1px solid var(--stake); color:var(--stake);
+  background:var(--stake-bg); white-space:nowrap;
+}
+.chip.q0{border-color:var(--rule-strong); color:var(--faint); background:var(--surface)}
+.chip.ok{border-color:var(--settled); color:var(--settled); background:var(--settled-bg)}
+.rail .sub{
+  display:block; font-family:"JetBrains Mono",monospace; font-size:9px;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--faint); margin-top:5px;
+}
+.ansline{
+  grid-column:2 / -1; margin-top:12px; border-bottom:1px dashed var(--rule-strong);
+  height:19px; position:relative;
+}
+.ansline::before{
+  content:"Answer"; position:absolute; left:0; bottom:2px;
+  font-family:"JetBrains Mono",monospace; font-size:8.5px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--rule-strong);
+}
+
+/* ---------- closing ---------- */
+.closer{
+  margin-top:44px; background:var(--surface); border:1px solid var(--rule); padding:20px 22px;
+}
+.closer h2{
+  font-family:Spectral,Georgia,serif; font-size:19px; font-weight:600; margin:0 0 10px;
+}
+.closer ol{margin:0; padding-left:20px}
+.closer li{font-size:14px; line-height:1.5; margin-bottom:7px; color:var(--ink-2)}
+.closer li:last-child{margin-bottom:0}
+.closer li b{color:var(--ink); font-weight:600}
+
+footer{
+  margin-top:34px; padding-top:14px; border-top:1px solid var(--rule);
+  font-family:"JetBrains Mono",monospace; font-size:10px; line-height:1.7;
+  letter-spacing:.05em; color:var(--faint);
+}
+
+@media (max-width:640px){
+  .wrap{padding:30px 18px 60px}
+  .q{grid-template-columns:22px 1fr; gap:0 10px}
+  .rail{grid-column:2; text-align:left; padding-top:9px}
+  .ansline{grid-column:2}
+}
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none; padding:0}
+  section{break-inside:avoid}
+  .q{break-inside:avoid}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <span class="eyebrow">Onyx Accounting Group, LLC &nbsp;&middot;&nbsp; 2026 benefits placement</span>
+  <h1>Questions for TriNet</h1>
+  <p class="dek">Twenty items, ordered by what they cost us. Every one of these is either
+  a number we derived rather than received, a figure TriNet's own paperwork states two
+  different ways, or a service we are being sold without a price. <em>Ask them in this
+  order.</em></p>
+  <div class="facts">
+    <div class="fact"><span class="k">Quote</span><span class="v mono">Q-00412887</span></div>
+    <div class="fact"><span class="k">Carrier under review</span><span class="v">Aetna only</span></div>
+    <div class="fact"><span class="k">Medical effective</span><span class="v">10 / 01 / 2026</span></div>
+    <div class="fact"><span class="k">Enrolling</span><span class="v">4 of 5 employees</span></div>
+    <div class="fact"><span class="k">Onyx contribution</span><span class="v mono">$34,800 / yr</span></div>
+  </div>
+</header>
+
+<div class="stakes">
+  <h2>What is actually unresolved</h2>
+  <p>At least <b>$4,560/yr of hard cost</b> is undetermined &mdash; $3,240 on which service
+  fee applies and $1,320 on whether we fund dental and vision. Beyond that, the entire
+  $34,800 contribution design rests on a <b>70% floor rule we reverse-engineered from
+  TriNet's own numbers</b>. It reconciles to the penny on both carriers they quoted, but
+  TriNet has never put it in writing. If that rule is different from what we derived, the
+  plan changes.</p>
+</div>
+
+<section>
+  <div class="shead"><span class="snum">01</span><h2>Fees and what we are required to pay</h2><span class="tag">ask first</span></div>
+
+  <div class="q">
+    <div class="qn">1</div>
+    <div class="qbody">
+      <p class="ask">Which service fee applies to us at five employees &mdash; $930 a month or $1,200?</p>
+      <p class="why">Your fee table produces $11,160 a year. Your footnote and your own cost
+      model both produce $14,400. Also: is the $1,200 minimum negotiable, and at what headcount
+      do we stop paying a minimum and start paying per employee?</p>
+      <span class="held"><b>What we hold:</b> $14,400 was decomposed out of your $54,367.45 total, so your model is using the higher figure.</span>
+    </div>
+    <div class="rail"><span class="chip">$3,240/yr</span><span class="sub">moves the ranking</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">2</div>
+    <div class="qbody">
+      <p class="ask">Is Josephine billed the service fee even though she waives medical, dental and vision?</p>
+      <p class="why">Five on payroll, four enrolling. If the fee is per worksite employee rather
+      than per enrollee, the per-head math we have been shown is understated.</p>
+    </div>
+    <div class="rail"><span class="chip q0">1 of 5</span><span class="sub">billable count</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">3</div>
+    <div class="qbody">
+      <p class="ask">State your employer contribution requirement in writing.</p>
+      <p class="why">We believe it is 70% of the employee-only rate of the cheapest plan we
+      offer &mdash; $269.50 against the ACO 6500's $385. Confirm the rule, and confirm that
+      fixed dollars of <b>$300 employee-only, $600 employee + spouse, $600 employee +
+      child(ren), $1,000 family</b> satisfies it on every plan on your menu.</p>
+      <span class="held"><b>What we hold:</b> nothing. We derived the 70% from your published employee contributions; you have not stated it anywhere.</span>
+    </div>
+    <div class="rail"><span class="chip">$34,800/yr</span><span class="sub">whole design</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">4</div>
+    <div class="qbody">
+      <p class="ask">Confirm we may fund dental and vision at $0 and have employees pay 100%.</p>
+      <p class="why">Our notes say we are not required to fund either. Get it in writing &mdash;
+      Insperity imposes a $27.50 per-enrollee minimum and we do not want to discover the same
+      thing after signing.</p>
+    </div>
+    <div class="rail"><span class="chip">$1,320/yr</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">5</div>
+    <div class="qbody">
+      <p class="ask">Basic life and long-term disability: what exactly is mandatory, at what rate, and for whom?</p>
+      <p class="why">TriNet is the only vendor of the four that requires employer-paid life.
+      We need the rate, and whether it must cover all five employees or only the four taking
+      medical &mdash; that difference is Josephine.</p>
+    </div>
+    <div class="rail"><span class="chip q0">rate</span><span class="sub">not quoted</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">6</div>
+    <div class="qbody">
+      <p class="ask">Workers' compensation: what class codes do the 0.044 and 0.087 rates attach to?</p>
+      <p class="why">You are the only vendor that disclosed comp rates, which we credit. Now
+      confirm there is no deposit, no minimum premium, and no year-end audit that can true up
+      against us.</p>
+      <span class="held"><b>What we hold:</b> we re-rated your rates to our actual payroll and got $324/yr. Confirm the class assignment for a CPA office.</span>
+    </div>
+    <div class="rail"><span class="chip ok">$324/yr</span><span class="sub">our re-rate</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">7</div>
+    <div class="qbody">
+      <p class="ask">Is there a setup or implementation fee, and is it waivable?</p>
+    </div>
+    <div class="rail"><span class="chip q0">unstated</span></div>
+    <div class="ansline"></div>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">02</span><h2>Renewal exposure</h2><span class="tag">year two is the real question</span></div>
+
+  <div class="q">
+    <div class="qn">8</div>
+    <div class="qbody">
+      <p class="ask">What did TriNet's Aetna book actually renew at on the last two 10/1 cycles?</p>
+      <p class="why">Allison has confirmed our renewal sits on 10/1 in perpetuity, which we
+      like. Now we need the number, not the mechanic. Give us the book average, not our
+      hypothetical.</p>
+      <span class="held"><b>Settled already:</b> "renewals are the 1st month of the quarter in which you start" &mdash; a 10/1 start holds 10/1 permanently.</span>
+    </div>
+    <div class="rail"><span class="chip ok">10/1 fixed</span><span class="sub">confirmed</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">9</div>
+    <div class="qbody">
+      <p class="ask">Is there any cap, corridor or rate guarantee in the agreement &mdash; or is the renewal entirely at Aetna's discretion?</p>
+      <p class="why">A large-group pooled rate is the main reason to be in a PEO at all. If
+      there is no contractual limit on the increase, say so plainly so we can price that risk.</p>
+    </div>
+    <div class="rail"><span class="chip">year 2</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">10</div>
+    <div class="qbody">
+      <p class="ask">Can you re-rate us mid-term, and what triggers it?</p>
+      <p class="why">Two live scenarios: Josephine enrolls at family coverage, or we add a
+      sixth employee. Either is a 20&ndash;25% change in enrolled lives. Angle can re-rate on
+      a 10% swing. Can you?</p>
+    </div>
+    <div class="rail"><span class="chip">+$12,000</span><span class="sub">if Josephine enrolls</span></div>
+    <div class="ansline"></div>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">03</span><h2>Before we quote plans to our people</h2><span class="tag">accuracy, not price</span></div>
+
+  <div class="q">
+    <div class="qn">11</div>
+    <div class="qbody">
+      <p class="ask">Do the Q-00412887 Aetna rates hold if we decline UHC entirely?</p>
+      <p class="why">We are only considering Aetna. Confirm the rates were not contingent on
+      the dual-carrier strategy.</p>
+    </div>
+    <div class="rail"><span class="chip q0">16 plans</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">12</div>
+    <div class="qbody">
+      <p class="ask">How many of the sixteen Aetna plans can we actually put in front of employees, and is there a minimum enrollment per plan?</p>
+      <p class="why">Our notes say TriNet requires the full menu. If that is right, say so &mdash;
+      it is a genuine advantage over a two-package structure, but only if there is no
+      per-plan participation trap.</p>
+    </div>
+    <div class="rail"><span class="chip q0">menu rule</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">13</div>
+    <div class="qbody">
+      <p class="ask">Send the Banner Health Network Arizona provider directory.</p>
+      <p class="why">The <b>ACO 6500</b> is the best plan in the whole PEO field on our
+      math &mdash; it wins both family tiers and its out-of-pocket maximum sits at $15,000
+      with the plan paying 100% after deductible. But it is a narrow network. We need Steven's
+      and Jessica's physicians checked against it before we recommend it, plus your answer on
+      out-of-area and travel care.</p>
+      <span class="held"><b>Why this matters most:</b> if Banner does not hold their doctors, our top-ranked plan comes off the table and the comparison changes.</span>
+    </div>
+    <div class="rail"><span class="chip">top-ranked</span><span class="sub">narrow network</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">14</div>
+    <div class="qbody">
+      <p class="ask">What is the new-hire waiting period, and does Jessica have a benefit eligibility date on or before 10/1?</p>
+    </div>
+    <div class="rail"><span class="chip">10/1</span><span class="sub">eligibility</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">15</div>
+    <div class="qbody">
+      <p class="ask">On the HSA plans &mdash; who administers the account, what does it cost the employee, and can Onyx seed it?</p>
+      <p class="why">Six of your sixteen plans are HSA-qualified, including the HDHP 6350,
+      which has the lowest total worst case of any PEO plan we modeled. Account fees change
+      that answer and we have no figure for them.</p>
+    </div>
+    <div class="rail"><span class="chip q0">fees</span><span class="sub">not quoted</span></div>
+    <div class="ansline"></div>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">04</span><h2>401(k)</h2><span class="tag">nothing disclosed</span></div>
+
+  <div class="q">
+    <div class="qn">16</div>
+    <div class="qbody">
+      <p class="ask">Send the fund lineup with expense ratios, and name the target-date series.</p>
+      <p class="why">You disclose no lineup at all. The 0.14% average in your materials cannot
+      be verified without it, and it is the one figure that decides whether your 401(k) beats
+      ADP's.</p>
+      <span class="held"><b>What we hold:</b> Empower as recordkeeper, TriNet as plan sponsor, and a 0.14% average with no holdings behind it.</span>
+    </div>
+    <div class="rail"><span class="chip">0.14%?</span><span class="sub">unverified</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">17</div>
+    <div class="qbody">
+      <p class="ask">Confirm Onyx pays nothing &mdash; no recordkeeping, no advisory, no base fee &mdash; and that every recurring cost falls on participants.</p>
+      <p class="why">That is how we read your proposal, and it is currently your strongest
+      advantage over Insperity. Confirm it, and disclose any per-participant flat dollar fee
+      on top of the fund expenses.</p>
+    </div>
+    <div class="rail"><span class="chip ok">$0 employer</span><span class="sub">our read</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">18</div>
+    <div class="qbody">
+      <p class="ask">As a multiple-employer plan where TriNet is the sponsor, does Onyx still qualify for the SECURE 2.0 startup and auto-enrollment credits?</p>
+      <p class="why">This is a real question, not a rhetorical one. The credits are worth
+      meaningful money to a five-person firm and the answer depends on the plan structure,
+      not on us.</p>
+    </div>
+    <div class="rail"><span class="chip">credits</span></div>
+    <div class="ansline"></div>
+  </div>
+
+  <div class="q">
+    <div class="qn">19</div>
+    <div class="qbody">
+      <p class="ask">Earliest realistic effective date, plus eligibility, entry dates, and whether Steven as 100% owner creates a top-heavy problem.</p>
+      <p class="why">Our read is that a 10/1 401(k) start alongside the medical is not
+      achievable. Tell us the real date so we stop planning around it.</p>
+    </div>
+    <div class="rail"><span class="chip q0">timing</span></div>
+    <div class="ansline"></div>
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="snum">05</span><h2>The services we are genuinely shopping</h2><span class="tag">new money either way</span></div>
+
+  <div class="q">
+    <div class="qn">20</div>
+    <div class="qbody">
+      <p class="ask">Price Electric above the basic tier, and price TriNetExpense, TriNet Perks and the referral arrangement.</p>
+      <p class="why">Four separate asks, one conversation &mdash; and this is the part of your
+      pitch we actually want:</p>
+      <p class="why"><b>Electric IT.</b> We spend nothing today and need it. Basic will not be
+      enough. Send the upgrade tiers with real numbers &mdash; this is the only thing on your
+      list nobody else offers.</p>
+      <p class="why"><b>TriNetExpense / Ramp.</b> What does it cost us, what does it cost our
+      clients, and what does the referral arrangement pay? Our clients are on Bill.com paying
+      monthly; ours is free.</p>
+      <p class="why"><b>TriNet Perks.</b> You described a "company Groupon" for rental cars and
+      gym memberships. What is actually in it, what does it cost, and is it live in Arizona?</p>
+      <p class="why"><b>TriNetTime.</b> Can it be customized enough to replace Harvest? Our
+      read is probably not &mdash; tell us if we are wrong.</p>
+      <span class="held"><b>And say plainly:</b> what the referral partnership agreement pays, and whether participating in it affects our own pricing.</span>
+    </div>
+    <div class="rail"><span class="chip">unpriced</span><span class="sub">4 services</span></div>
+    <div class="ansline"></div>
+  </div>
+</section>
+
+<div class="closer">
+  <h2>Before you leave the room</h2>
+  <ol>
+    <li><b>Get the floor rule and the service fee in writing, in the meeting.</b> Everything else can follow by email. Those two decide whether TriNet is competitive at all.</li>
+    <li><b>Ask what happens if we leave.</b> Notice required at a renewal, whether we get claims and loss experience data, and whether Aetna issues a certificate of prior coverage. A PEO that will not hand back experience data makes the next shopping cycle blind.</li>
+    <li><b>Pin the EPLI.</b> $1,000,000 is stated &mdash; per claim or aggregate, and does it cover acts during the term after we terminate?</li>
+    <li><b>Do not compare their figures for our current costs.</b> Those numbers were invented. Keep the conversation on their own pricing.</li>
+  </ol>
+</div>
+
+<footer>
+  Sources: TriNet quote Q-00412887 (Aetna and UHC strategies) &middot; TriNet VROI &middot; TriNet 401(k) materials &middot; Allison Irwin on renewal anchoring<br>
+  Every dollar figure on this sheet was re-rated to Onyx's actual enrollment &mdash; Lisa employee-only, Christine employee + spouse, Steven and Jessica family, Josephine waiving. No vendor priced this group correctly.
+</footer>
+
+</div>
