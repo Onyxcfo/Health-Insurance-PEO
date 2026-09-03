@@ -131,7 +131,7 @@ for i,st in enumerate(["Open","Answered","Partial","Refused","Not applicable"]):
     c=s.cell(row=rr,column=2,value=f'=COUNTIF({QCOL},A{rr})'); c.font=BLD
     c.alignment=Alignment(horizontal="center")
     for col in (1,2): s.cell(row=rr,column=col).border=BOX
-s["D6"]='=COUNTIF('+PCOL+',"Ask first")&" are ASK FIRST - the fee and the contribution floor"'
+s["D6"]='=COUNTIF('+PCOL+',"Ask first")&" are ASK FIRST - the service fee, the contribution floor and the target-date expense ratio"'
 s["D6"].font=SM
 s["D7"]=f'="Answered in writing: "&COUNTIF({WCOL},"Yes")'
 s["D7"].font=SM
