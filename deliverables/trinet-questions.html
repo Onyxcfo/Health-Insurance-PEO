@@ -81,6 +81,48 @@ h1{
 .stakes p{margin:0; font-size:14px; color:var(--ink); max-width:66ch}
 .stakes b{font-weight:700}
 
+
+/* ---------- the five for today ---------- */
+.today{margin-top:30px; border:2px solid var(--ink); background:var(--surface)}
+.today-head{
+  background:var(--ink); color:var(--paper); padding:11px 18px;
+  display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap;
+}
+.today-head h2{
+  font-family:Spectral,Georgia,serif; font-size:19px; font-weight:600; margin:0;
+  color:var(--paper); letter-spacing:-.01em;
+}
+.today-head .sub{
+  font-family:"JetBrains Mono",monospace; font-size:9.5px; letter-spacing:.13em;
+  text-transform:uppercase; opacity:.72;
+}
+.five{display:flex; flex-direction:column}
+.five>div{
+  display:grid; grid-template-columns:30px 1fr 132px; gap:0 14px;
+  padding:15px 18px; border-bottom:1px solid var(--rule);
+}
+.five>div:last-child{border-bottom:none}
+.five .n{
+  font-family:Spectral,Georgia,serif; font-size:26px; font-weight:700;
+  line-height:.9; color:var(--stake); font-variant-numeric:lining-nums;
+}
+.five .q2{font-size:15.5px; font-weight:600; line-height:1.4; color:var(--ink); margin:0}
+.five .r{font-size:13px; color:var(--ink-2); margin:5px 0 0; max-width:60ch}
+.five .why2{
+  text-align:right; font-family:"JetBrains Mono",monospace; font-size:10px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--faint); line-height:1.5; padding-top:5px;
+}
+.five .why2 b{display:block; font-size:12.5px; letter-spacing:0; text-transform:none; color:var(--stake); font-weight:700; margin-bottom:2px}
+.rest{
+  margin-top:14px; padding:13px 18px; background:var(--surface); border:1px solid var(--rule);
+  font-size:13.5px; color:var(--ink-2);
+}
+.rest b{color:var(--ink)}
+@media (max-width:640px){
+  .five>div{grid-template-columns:26px 1fr; gap:0 10px}
+  .five .why2{grid-column:2; text-align:left; padding-top:8px}
+}
+
 /* ---------- sections ---------- */
 section{margin-top:40px}
 .shead{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--rule-strong); padding-bottom:7px}
@@ -177,10 +219,10 @@ footer{
 <header class="mast">
   <span class="eyebrow">Onyx Accounting Group, LLC &nbsp;&middot;&nbsp; 2026 benefits placement</span>
   <h1>Questions for TriNet</h1>
-  <p class="dek">Twenty items, ordered by what they cost us. Every one of these is either
-  a number we derived rather than received, a figure TriNet's own paperwork states two
-  different ways, or a service we are being sold without a price. <em>Ask them in this
-  order.</em></p>
+  <p class="dek">Five questions for the meeting, then twenty-six for the record. Every item here is
+  either a number we derived rather than received, a figure TriNet's own paperwork states two different
+  ways, or a service we are being sold without a price. <em>The five at the top are the ones that change
+  the decision.</em></p>
   <div class="facts">
     <div class="fact"><span class="k">Quote</span><span class="v mono">Q-00412887</span></div>
     <div class="fact"><span class="k">Carrier under review</span><span class="v">Aetna only</span></div>
@@ -200,8 +242,78 @@ footer{
   plan changes.</p>
 </div>
 
+<div class="today">
+  <div class="today-head">
+    <h2>Ask these five today</h2>
+    <span class="sub">the rest can go by email</span>
+  </div>
+  <div class="five">
+
+    <div>
+      <div class="n">1</div>
+      <div>
+        <p class="q2">Which service fee applies to us at five employees &mdash; $930 a month or $1,200? Is the minimum negotiable?</p>
+        <p class="r">Your fee table produces $11,160 a year. Your footnote and your own cost model both produce $14,400.</p>
+      </div>
+      <div class="why2"><b>$3,240/yr</b>the only thing that can close the gap</div>
+    </div>
+
+    <div>
+      <div class="n">2</div>
+      <div>
+        <p class="q2">Put your employer contribution requirement in writing.</p>
+        <p class="r">Confirm that fixed dollars of $300 employee-only, $600 employee+spouse, $600 employee+child(ren)
+        and $1,000 family clear it on every plan on your menu. We believe the rule is 70% of the cheapest
+        employee-only rate, but we derived that &mdash; you have never stated it.</p>
+      </div>
+      <div class="why2"><b>$34,800</b>we cannot sign without it</div>
+    </div>
+
+    <div>
+      <div class="n">3</div>
+      <div>
+        <p class="q2">Send the Banner Health Network Arizona provider directory.</p>
+        <p class="r">The ACO 6500 is the best plan in the whole PEO field on our math &mdash; it wins both family
+        tiers. But it is narrow-network, and we cannot recommend it until Steven's and Jessica's physicians are
+        checked against it.</p>
+      </div>
+      <div class="why2"><b>your best plan</b>unusable if the doctors are out</div>
+    </div>
+
+    <div>
+      <div class="n">4</div>
+      <div>
+        <p class="q2">Beyond medical, what is Onyx actually required to fund?</p>
+        <p class="r">Confirm we may fund dental and vision at $0. Then tell us exactly what is mandatory on
+        life and LTD, at what rate, and whether it must cover all five employees or only the four taking
+        medical. You are the only vendor of the four requiring employer-paid life, and the rate was never
+        quoted.</p>
+      </div>
+      <div class="why2"><b>$1,320/yr</b>plus an unquoted rate</div>
+    </div>
+
+    <div>
+      <div class="n">5</div>
+      <div>
+        <p class="q2">What is the all-in expense ratio of your target-date series, and does the $63 participant fee come out on top of it?</p>
+        <p class="r">One number settles retirement. ADP has now published its full schedule &mdash; target-date
+        0.48% all-in with no participant account fee. We do not need your whole lineup.</p>
+      </div>
+      <div class="why2"><b>settles the 401(k)</b>one number</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="rest">
+  <b>Everything below can wait.</b> The next three worth an email: what your Aetna book actually renewed at on
+  the last two 10/1 cycles &middot; when the $150 per hour for contribution allocation applies and roughly how
+  many hours a year it runs &middot; Electric upgrade pricing above the basic tier. The full twenty-six follow
+  as a record of what is still open.
+</div>
+
 <section>
-  <div class="shead"><span class="snum">01</span><h2>Fees and what we are required to pay</h2><span class="tag">ask first</span></div>
+  <div class="shead"><span class="snum">01</span><h2>Fees and what we are required to pay</h2><span class="tag">full list &middot; for the record</span></div>
 
   <div class="q">
     <div class="qn">1</div>
