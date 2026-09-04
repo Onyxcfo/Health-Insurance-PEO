@@ -1,0 +1,382 @@
+<title>Questions for ADP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#15191C; --ink-2:#3A444A; --faint:#6E7A80;
+  --paper:#FCFCFB; --surface:#EFF2F3; --surface-2:#E4E9EA;
+  --rule:#D3DADC; --rule-strong:#9AA6AA;
+  --stake:#8E2F2A; --stake-bg:#F6E9E7;
+  --settled:#2C6560; --settled-bg:#E4EEEC;
+  --shadow:rgba(21,25,28,.07);
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EDEE; --ink-2:#B3BEC2; --faint:#7E8B90;
+    --paper:#121618; --surface:#1B2124; --surface-2:#232B2F;
+    --rule:#2E383C; --rule-strong:#4C595E;
+    --stake:#E0847C; --stake-bg:#33201E;
+    --settled:#79BDB4; --settled-bg:#162927;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EDEE; --ink-2:#B3BEC2; --faint:#7E8B90;
+  --paper:#121618; --surface:#1B2124; --surface-2:#232B2F;
+  --rule:#2E383C; --rule-strong:#4C595E;
+  --stake:#E0847C; --stake-bg:#33201E;
+  --settled:#79BDB4; --settled-bg:#162927;
+  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14.5px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px; margin:0 auto; padding:44px 30px 80px}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:2.5px solid var(--ink); padding-bottom:18px}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--faint);
+}
+h1{
+  font-family:Spectral,Georgia,serif; font-weight:700;
+  font-size:clamp(30px,5vw,42px); line-height:1.06; letter-spacing:-.015em;
+  margin:8px 0 10px; text-wrap:balance;
+}
+.dek{
+  font-family:Spectral,Georgia,serif; font-size:16.5px; line-height:1.5;
+  color:var(--ink-2); max-width:62ch; margin:0;
+}
+.dek em{color:var(--ink); font-style:italic}
+
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule);
+  margin-top:22px;
+}
+.fact{background:var(--paper); padding:9px 12px}
+.fact .k{
+  font-family:"JetBrains Mono",monospace; font-size:9px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--faint);
+  display:block; margin-bottom:3px;
+}
+.fact .v{font-size:13.5px; font-weight:600; line-height:1.3}
+
+/* ---------- stakes banner ---------- */
+.stakes{
+  margin-top:26px; border-left:3px solid var(--stake);
+  background:var(--stake-bg); padding:14px 18px;
+}
+.stakes h2{
+  font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--stake);
+  margin:0 0 7px;
+}
+.stakes p{margin:0; font-size:14px; color:var(--ink); max-width:66ch}
+.stakes b{font-weight:700}
+
+
+/* ---------- the five for today ---------- */
+.today{margin-top:30px; border:2px solid var(--ink); background:var(--surface)}
+.today-head{
+  background:var(--ink); color:var(--paper); padding:11px 18px;
+  display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap;
+}
+.today-head h2{
+  font-family:Spectral,Georgia,serif; font-size:19px; font-weight:600; margin:0;
+  color:var(--paper); letter-spacing:-.01em;
+}
+.today-head .sub{
+  font-family:"JetBrains Mono",monospace; font-size:9.5px; letter-spacing:.13em;
+  text-transform:uppercase; opacity:.72;
+}
+.five{display:flex; flex-direction:column}
+.five>div{
+  display:grid; grid-template-columns:30px 1fr 132px; gap:0 14px;
+  padding:15px 18px; border-bottom:1px solid var(--rule);
+}
+.five>div:last-child{border-bottom:none}
+.five .n{
+  font-family:Spectral,Georgia,serif; font-size:26px; font-weight:700;
+  line-height:.9; color:var(--stake); font-variant-numeric:lining-nums;
+}
+.five .q2{font-size:15.5px; font-weight:600; line-height:1.4; color:var(--ink); margin:0}
+.five .r{font-size:13px; color:var(--ink-2); margin:5px 0 0; max-width:60ch}
+.five .why2{
+  text-align:right; font-family:"JetBrains Mono",monospace; font-size:10px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--faint); line-height:1.5; padding-top:5px;
+}
+.five .why2 b{display:block; font-size:12.5px; letter-spacing:0; text-transform:none; color:var(--stake); font-weight:700; margin-bottom:2px}
+.rest{
+  margin-top:14px; padding:13px 18px; background:var(--surface); border:1px solid var(--rule);
+  font-size:13.5px; color:var(--ink-2);
+}
+.rest b{color:var(--ink)}
+@media (max-width:640px){
+  .five>div{grid-template-columns:26px 1fr; gap:0 10px}
+  .five .why2{grid-column:2; text-align:left; padding-top:8px}
+}
+
+/* ---------- sections ---------- */
+section{margin-top:40px}
+.shead{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--rule-strong); padding-bottom:7px}
+.snum{
+  font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:700;
+  color:var(--stake); letter-spacing:.05em; flex:none;
+}
+.shead h2{
+  font-family:Spectral,Georgia,serif; font-size:21px; font-weight:600;
+  letter-spacing:-.01em; margin:0; flex:1 1 auto;
+}
+.shead .tag{
+  font-family:"JetBrains Mono",monospace; font-size:9px; font-weight:500;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--faint);
+  flex:none; text-align:right;
+}
+
+/* ---------- question rows ---------- */
+.q{
+  display:grid; grid-template-columns:26px 1fr 116px; gap:0 14px;
+  padding:16px 0 14px; border-bottom:1px solid var(--rule);
+}
+.q:last-child{border-bottom:none}
+.qn{
+  font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:700;
+  color:var(--rule-strong); padding-top:1px; font-variant-numeric:tabular-nums;
+}
+.qbody .ask{font-size:15px; font-weight:600; line-height:1.42; margin:0 0 6px; color:var(--ink)}
+.qbody .why{font-size:13.5px; color:var(--ink-2); margin:0; max-width:64ch}
+.qbody .why + .why{margin-top:5px}
+.qbody .held{
+  display:block; margin-top:7px; padding-left:9px;
+  border-left:2px solid var(--rule-strong);
+  font-size:12.5px; color:var(--faint); max-width:62ch;
+}
+.qbody .held b{color:var(--ink-2); font-weight:600}
+.rail{padding-top:2px; text-align:right}
+.chip{
+  display:inline-block; font-family:"JetBrains Mono",monospace;
+  font-size:11px; font-weight:700; letter-spacing:.02em;
+  padding:3px 7px; border:1px solid var(--stake); color:var(--stake);
+  background:var(--stake-bg); white-space:nowrap;
+}
+.chip.q0{border-color:var(--rule-strong); color:var(--faint); background:var(--surface)}
+.chip.ok{border-color:var(--settled); color:var(--settled); background:var(--settled-bg)}
+.rail .sub{
+  display:block; font-family:"JetBrains Mono",monospace; font-size:9px;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--faint); margin-top:5px;
+}
+.ansline{
+  grid-column:2 / -1; margin-top:12px; border-bottom:1px dashed var(--rule-strong);
+  height:19px; position:relative;
+}
+.ansline::before{
+  content:"Answer"; position:absolute; left:0; bottom:2px;
+  font-family:"JetBrains Mono",monospace; font-size:8.5px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--rule-strong);
+}
+
+/* ---------- closing ---------- */
+.closer{
+  margin-top:44px; background:var(--surface); border:1px solid var(--rule); padding:20px 22px;
+}
+.closer h2{
+  font-family:Spectral,Georgia,serif; font-size:19px; font-weight:600; margin:0 0 10px;
+}
+.closer ol{margin:0; padding-left:20px}
+.closer li{font-size:14px; line-height:1.5; margin-bottom:7px; color:var(--ink-2)}
+.closer li:last-child{margin-bottom:0}
+.closer li b{color:var(--ink); font-weight:600}
+
+footer{
+  margin-top:34px; padding-top:14px; border-top:1px solid var(--rule);
+  font-family:"JetBrains Mono",monospace; font-size:10px; line-height:1.7;
+  letter-spacing:.05em; color:var(--faint);
+}
+
+@media (max-width:640px){
+  .wrap{padding:30px 18px 60px}
+  .q{grid-template-columns:22px 1fr; gap:0 10px}
+  .rail{grid-column:2; text-align:left; padding-top:9px}
+  .ansline{grid-column:2}
+}
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none; padding:0}
+  section{break-inside:avoid}
+  .q{break-inside:avoid}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <span class="eyebrow">Onyx Accounting Group, LLC &nbsp;&middot;&nbsp; 2026 benefits placement</span>
+  <h1>Questions for ADP</h1>
+  <p class="dek">ADP leads the field by <em>$4,586 a year</em> and its 401(k) is now fully documented.
+  These five are the things that could still change that &mdash; the renewal date, and three costs we
+  have taken on trust.</p>
+  <div class="facts">
+    <div class="fact"><span class="k">Year 1 as modeled</span><span class="v mono">$46,981</span></div>
+    <div class="fact"><span class="k">Service fee</span><span class="v mono">1.53% &middot; $10,072</span></div>
+    <div class="fact"><span class="k">Contribution floor</span><span class="v mono">$187.02</span></div>
+    <div class="fact"><span class="k">Plans available</span><span class="v">11 Aetna rungs</span></div>
+    <div class="fact"><span class="k">Renewal</span><span class="v">6 / 01 / 2027</span></div>
+  </div>
+</header>
+
+<div class="stakes">
+  <h2>Why these five</h2>
+  <p>ADP wins year one on every line. It loses the <b>two-year</b> comparison &mdash; $119,331 against
+  TriNet's $116,525 &mdash; for one reason: its plan year ends 6/1/2027, so Onyx gets an eight-month
+  first year and absorbs <b>two increases inside 24 months</b> where every other vendor absorbs one.
+  Separately, three of ADP's cost lines rest on our reading rather than on their confirmation:
+  <b>workers' compensation at $0</b>, what the <b>1.53%</b> is actually charged on, and whether we may
+  keep the cheapest plan on the menu to hold the <b>$187.02 floor</b>.</p>
+</div>
+
+<div class="today">
+  <div class="today-head">
+    <h2>Ask these five</h2>
+    <span class="sub">ranked by what they can move</span>
+  </div>
+  <div class="five">
+
+    <div>
+      <div class="n">1</div>
+      <div>
+        <p class="q2">Is the June 1 renewal fixed, or can we get a 10/1 anniversary &mdash; or rates held through 9/30/2027?</p>
+        <p class="r">Every plan card in your deck reads "Renewal Info 6/1/2027 &mdash; 10%." That gives us an
+        eight-month first plan year and makes ADP the only vendor taking two increases in 24 months. TriNet holds
+        10/1 in perpetuity; Insperity renews on the anniversary. You are the outlier, and it is the one thing
+        that costs you the two-year comparison.</p>
+      </div>
+      <div class="why2"><b>$2,806</b>over 24 months</div>
+    </div>
+
+    <div>
+      <div class="n">2</div>
+      <div>
+        <p class="q2">Is workers' compensation genuinely inside the 1.53% &mdash; no separate premium, no deposit, no year-end audit? And what is the EPLI limit?</p>
+        <p class="r">We have modeled your workers' comp at <b>$0</b> on that basis. It is the single largest
+        assumption running in your favor. TriNet charges $300 separately and Insperity roughly $994. Your EPLI is
+        stated as included with no limit given; TriNet states $1,000,000.</p>
+      </div>
+      <div class="why2"><b>$0 assumed</b>largest unverified line</div>
+    </div>
+
+    <div>
+      <div class="n">3</div>
+      <div>
+        <p class="q2">What exactly is the 1.53% charged on, and is the rate locked?</p>
+        <p class="r">It produces $10,072 on our $658,322 of gross payroll. Is the base gross wages only, or does
+        it pick up bonuses, owner distributions and employer benefit contributions? Is there a per-employee cap?
+        Is 1.53% guaranteed, and for how long? Yours is the only fee that rises automatically with every
+        raise &mdash; it passes TriNet's $14,400 floor once payroll reaches about $941,000.</p>
+      </div>
+      <div class="why2"><b>$10,072</b>largest required line</div>
+    </div>
+
+    <div>
+      <div class="n">4</div>
+      <div>
+        <p class="q2">Confirm in writing that we choose the lineup &mdash; and that we may keep the 8000 ValueINT on it purely to hold the floor.</p>
+        <p class="r">Our $187.02 floor is 50% of that plan's $374.03 employee-only rate, and it is the lowest
+        floor of any vendor. Nobody should actually elect it: $8,000 deductible, $10,000 out-of-pocket
+        maximum, not HSA-eligible. So confirm two things &mdash; there is <b>no minimum enrollment per
+        plan</b>, and the floor keys to the cheapest plan <b>we offer</b> rather than the cheapest you have.
+        While we are there, confirm the plan list: your deck shows twelve columns but lists the OA EPO HDHP
+        3500-80% twice, so we count eleven.</p>
+      </div>
+      <div class="why2"><b>$187.02</b>lowest floor in the field</div>
+    </div>
+
+    <div>
+      <div class="n">5</div>
+      <div>
+        <p class="q2">Do you allow different funding tiers by class, and can we set a zero waiting period for new hires?</p>
+        <p class="r">TriNet has confirmed both. Funding tiers would let Onyx cover Steven's family premium at
+        100% while holding everyone else at the fixed dollars. A zero waiting period is what puts Jessica on
+        coverage 10/1 rather than later.</p>
+      </div>
+      <div class="why2"><b>TriNet: yes</b>you: unknown</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="rest">
+  <b>Three quick confirms, by email is fine.</b> Whether an adopting employer in your multiple employer plan
+  still claims the <b>SECURE 2.0 start-up credits</b> &mdash; neither you nor TriNet addresses it &middot; the
+  <b>Summary Plan Description</b> and <b>Investment Policy Statement</b> for the 401(k), the latter being where
+  3(38) investment-fiduciary status would appear if it exists &middot; whether <b>Workforce Now Learning</b> is
+  inside the 1.53% or an add-on.
+</div>
+
+<section>
+  <div class="shead"><span class="snum">&mdash;</span><h2>What is already settled with ADP</h2><span class="tag">do not spend meeting time here</span></div>
+  <div class="q">
+    <div class="qn">&#10003;</div>
+    <div class="qbody">
+      <p class="ask">Basic life and long-term disability are elective.</p>
+      <p class="why">Confirmed on our call. Keeping both costs $209/yr and our benefit design includes them.</p>
+    </div>
+    <div class="rail"><span class="chip ok">settled</span></div>
+  </div>
+  <div class="q">
+    <div class="qn">&#10003;</div>
+    <div class="qbody">
+      <p class="ask">Dental and vision can be employee-paid in full.</p>
+      <p class="why">Stated outright &mdash; "can be employee all paid." Funding them voluntarily would cost $1,320/yr.</p>
+    </div>
+    <div class="rail"><span class="chip ok">settled</span></div>
+  </div>
+  <div class="q">
+    <div class="qn">&#10003;</div>
+    <div class="qbody">
+      <p class="ask">The 401(k) costs Onyx nothing and charges participants no account fee.</p>
+      <p class="why">Their DOL &sect;404a-5 disclosure dated 6/30/2026 shows administration funded by a 0.22%
+      credit inside fund expenses, recordkeeping at $49 per participant paid by the plan, and a target-date
+      series at 0.48% all-in. Voya as recordkeeper, ADP as plan sponsor and 3(16) administrator.</p>
+    </div>
+    <div class="rail"><span class="chip ok">settled</span></div>
+  </div>
+  <div class="q">
+    <div class="qn">&#10003;</div>
+    <div class="qbody">
+      <p class="ask">Handbook and policy review are included.</p>
+      <p class="why">ADP confirmed. Onyx already has a handbook, so the value is in maintenance rather than creation.</p>
+    </div>
+    <div class="rail"><span class="chip ok">settled</span></div>
+  </div>
+</section>
+
+<div class="closer">
+  <h2>Before you leave the room</h2>
+  <ol>
+    <li><b>The renewal date is the ask that matters.</b> Everything else on this page protects a number we
+    already have; question 1 is the only one that can improve ADP's position. A 10/1 anniversary would make
+    ADP the best vendor over two years as well as one.</li>
+    <li><b>Get the workers' comp answer in the service agreement, not verbally.</b> "Inside the fee" is doing
+    a lot of work in our model.</li>
+    <li><b>Do not compare their figures for our current costs.</b> Those numbers were invented, at every
+    vendor. Keep the conversation on their own pricing.</li>
+  </ol>
+</div>
+
+<footer>
+  Sources: ADP TotalSource proposal deck pp.6&ndash;8, renewal info dated 6/1/2027 &middot; ADP TotalSource
+  financial analysis 8/27/2026 &middot; ADP TotalSource Retirement Savings Plan participant fee disclosure,
+  6/30/2026 &middot; ADP confirmations on our call<br>
+  Every dollar figure was re-rated to Onyx's actual enrollment &mdash; Lisa employee-only, Christine
+  employee + spouse, Steven and Jessica family, Josephine waiving. ADP quoted $628,680 of payroll against our
+  actual $658,322.
+</footer>
+
+</div>
