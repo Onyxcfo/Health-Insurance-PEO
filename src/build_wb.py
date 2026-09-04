@@ -87,7 +87,7 @@ sec(a, 16, "2.  VENDOR EMPLOYER CONTRIBUTION FLOORS  (minimum Onyx must pay per 
 hdr(a, 17, ["Vendor", "% required", "Reference plan employee-only premium", "Floor $/mo per enrolled EE", "Reference plan", "Source / status"])
 fl_src = {
  "ADP":    "Stated in writing: 50% of the lowest-cost plan, employee-only rate.",
- "TriNet": "DERIVED, not stated.  70% of the cheapest Aetna plan's employee-only rate; reproduces TriNet's own published employee contributions to the penny on both carriers.  STILL NEEDED IN WRITING.",
+ "TriNet": "CONFIRMED by TriNet: 70% of the minimum funding on the lowest-cost plan offered.  Our derivation was right and reconciles to the penny on both carriers quoted.  Keyed to the ACO 6500's $385 employee-only rate.",
  "Angle":  "Level-funded minimum participation funding; 50% of the lowest employee-only rate.",
 }
 for i, (v, pct, ref, refplan) in enumerate(FLOORS):
@@ -149,7 +149,9 @@ for i, (k, v) in enumerate(meth):
 
 sec(a, 46, "5.  OPEN ITEMS THAT COULD MOVE THESE NUMBERS")
 for i, t in enumerate([
-  "TriNet's 70% contribution floor is derived, not documented.  Requested in writing.",
+  "TriNet says TWELVE plans are available; the strategy appendix we were given lists the SIXTEEN Aetna rungs in this workbook.  Which four are unavailable is unknown, so all sixteen are kept here.  It matters only if the ACO 6500 is not among the twelve - the $269.50 floor is keyed to its $385 rate, and dropping the four cheapest would push the floor to $364.00, above the $300 employee-only target.",
+  "TriNet has confirmed its service fee is the $1,200/month minimum ($14,400/yr), its workers' compensation is $300, basic life at $10,000 is $67, and nothing else is required - no dental, no vision, and long-term disability is optional.",
+  "TriNet allows different funding tiers by class, so Onyx could fund Steven at 100% while holding others at the fixed dollars.  Not modeled here - this workbook applies the stated tier targets uniformly.",
   "Whether Steven enrolls.  Family coverage for him is roughly $12,000/yr of Onyx contribution.",
   "No contribution target has been set for employee + child(ren).  Defaulted to $600.",
   "Angle's renewal exposure.  Level-funded; a 40% increase at renewal is considered likely.",
