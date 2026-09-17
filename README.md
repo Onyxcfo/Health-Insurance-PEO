@@ -13,6 +13,7 @@ Insperity (PEO) and Angle Health / CapFi (direct level-funded).
 | `Onyx_TriNet_Questions.xlsx` | The same diligence list as a working spreadsheet — 26 rows, fill-in columns for the answer, whether it came in writing, and status; a Summary tab tallies progress and separates the kinds of dollar exposure. |
 | `adp-questions.html` | Five questions for the ADP meeting, the three quick confirms, and what ADP has already settled. |
 | `angle-hcra-forms/` | The three New York DOH Health Care Reform Act forms for the Angle level-funded plan — DOH-4399 Payor Election, DOH-4264 Electronic Filing User ID, DOH-4403 TPA/ASO Status Change — filled for Onyx. Signature and date left blank. |
+| `pdf/` | Print-ready PDFs of the three HTML documents. The report is landscape so its wide tables are not clipped. Regenerate with `src/topdf.mjs` after any edit. |
 
 ## src/
 
@@ -23,6 +24,7 @@ Insperity (PEO) and Angle Health / CapFi (direct level-funded).
 | `qsheet.py` | The TriNet diligence questions, with the context and dollar exposure attached to each. |
 | `build_q.py` | Builds the question workbook from `qsheet.py`. |
 | `fill_forms.py` | Fills the three NY DOH HCRA forms from the values at the top of the file. Re-run it if any of them change. |
+| `topdf.mjs` | Renders the three HTML documents to print-ready PDFs. Run it again after editing any of them. |
 
 ## Contribution basis
 
