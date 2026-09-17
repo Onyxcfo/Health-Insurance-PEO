@@ -367,7 +367,7 @@ SVC=[("Payroll administration","Processing, direct deposit, garnishments, state 
      ("Benefits administration","Enrollments, terminations, qualifying events, COBRA, Section 125 compliance, creditable coverage reporting, claims advocacy, and in-house invoice reconciliation for client-owned plans.","High - and the reason Questco can administer the Angle plan."),
      ("Self-funded plan filings","PCORI fee calculation and Form 720; Forms 1094-B/1095-B.","CRITICAL. Angle is level funded, so these are now Onyx's obligations. Confirm in writing that Questco covers them for the Angle plan by name."),
      ("Workers' compensation","Coverage at PEO rates, safety training and materials, claims handling.","Medium. Office exposure is low, but the rate is still subject to underwriting."),
-     ("401(k)","Large-group multiple employer plan, $3.00 per participating employee per quarter, no employer cost unless Onyx matches. Confirmed it does not require annual re-signature by Onyx.","High. Cheapest participant fee of any vendor reviewed. See the 401(k) tab."),
+     ("401(k)","Large-group multiple employer plan, $3.00 per participating employee per quarter, no employer cost unless Onyx matches. Confirmed it does not require annual re-signature by Onyx.","High. See the 401(k) tab - the match is the only part Onyx controls."),
      ("Cyber liability","$250,000 annual aggregate, $1,000 per-claim retention, $50,000 sub-limits, 24/7 incident hotline.","Declined - Onyx is placing a standalone policy instead."),
      ("CPEO status","IRS-Certified Professional Employer Organization.","High. It is what protects the payroll-tax wage bases from restarting on a mid-year start - worth roughly $5,600 given Steven's and Lisa's salaries. Confirm it."),
      ("HR technology","Employee self-service portal, mobile access, reporting and analytics.","Medium."),
@@ -387,8 +387,8 @@ print("questco ok")
 # ================= 6. 401(k) =================
 k=wb.create_sheet("401(k)")
 k["A1"]="401(k) through Questco - match modelling"; k["A1"].font=TTL
-k["A2"]=("Questco charges $3.00 per participating employee per quarter and nothing to Onyx unless Onyx matches. "
-         "Everything below is a lever - change the match formula, who participates, or what they defer.")
+k["A2"]=("Questco charges $3.00 per participating employee per quarter and nothing to Onyx unless Onyx chooses to match. "
+         "A match is NOT required - see block 4. Everything below is a lever.")
 k["A2"].font=SUB
 k["A3"]="EDIT THE YELLOW CELLS."; k["A3"].font=Font(name=F,size=10,bold=True,color="8E2F2A")
 
@@ -406,33 +406,34 @@ def setrow(r,label,v1,v2,note,f1=CUR2,f2=None,yellow2=False):
     k.cell(row=r,column=5,value=note).font=SM; k.cell(row=r,column=5).alignment=WRAP
     k.row_dimensions[r].height=30
     for col in range(1,6): k.cell(row=r,column=col).border=BOX
-
 setrow(7,"Per-participant fee",3.00,"per quarter",
-       "Questco's quoted 401(k) fee. $12 a year per participant - the lowest of any vendor reviewed. TriNet charges $63; ADP charges none but recovers it inside fund expense ratios.")
+       "Questco's quoted fee - $12 a year per participant.")
 setrow(8,"Fee paid by","Participant",None,
-       "Set to Employer to have Onyx absorb it. Questco's statement is that Onyx pays nothing unless it matches, so Participant is the default - confirm with them.",f1=None)
+       "Set to Employer to have Onyx absorb it. Questco's statement is that Onyx pays nothing unless it matches, so Participant is the default - worth confirming.",f1=None)
 setrow(9,"IRS compensation limit",350000,None,
        "CONFIRM the current-year 401(a)(17) figure. Nobody here is close, so it does not bind.",f1=CUR)
 setrow(10,"IRS elective deferral limit",24000,None,
        "CONFIRM the current-year 402(g) figure. Not binding at the deferral rates below.",f1=CUR)
 dvf=DataValidation(type="list",formula1='"Participant,Employer"',allow_blank=False,showDropDown=False)
 k.add_data_validation(dvf); dvf.add("C8")
-
-setrow(12,"Match type","Tiered match",None,
-       "Tiered match, Non-elective, or None. Non-elective goes to every participating employee whether or not they defer.",f1=None)
+setrow(12,"Match type","None",None,
+       "None, Tiered match, or Non-elective. Defaults to None because nothing has been committed. Block 3 prices all three at once.",f1=None)
 setrow(13,"Tier 1 - match rate",1.00,0.03,
-       "Match 100% of the first 3% of pay deferred. With Tier 2 this is the classic safe harbor basic formula.",f1=PCT,f2=PCT,yellow2=True)
+       "Match 100% of the first 3% of pay deferred. With Tier 2 this is the safe harbor basic formula.",f1=PCT,f2=PCT,yellow2=True)
 setrow(14,"Tier 2 - match rate",0.50,0.02,
-       "Match 50% of the next 2% of pay. An employee deferring 5% or more earns the full 4% of pay.",f1=PCT,f2=PCT,yellow2=True)
+       "Match 50% of the next 2% of pay. Anyone deferring 5% or more earns the full 4% of pay.",f1=PCT,f2=PCT,yellow2=True)
 setrow(15,"Non-elective rate",0.03,None,
-       "Used only when Match type is Non-elective. 3% of pay to every participating employee.",f1=PCT)
-dvm=DataValidation(type="list",formula1='"Tiered match,Non-elective,None"',allow_blank=False,showDropDown=False)
+       "Used only when Match type is Non-elective. 3% of pay to every participating employee, whether or not they defer.",f1=PCT)
+dvm=DataValidation(type="list",formula1='"None,Tiered match,Non-elective"',allow_blank=False,showDropDown=False)
 k.add_data_validation(dvm); dvm.add("C12")
 
-sec(k,17,"2.  WHO PARTICIPATES AND WHAT THEY DEFER",8)
+sec(k,17,"2.  WHO PARTICIPATES AND WHAT THEY DEFER",10)
 hdr(k,18,["Employee","Eligible pay","Participating?","Deferral % of pay","Employee deferral $/yr",
-          "Onyx match $/yr","Match as % of pay","Participant fee $/yr"],h=34)
+          "Onyx match $/yr (selected type)","Match as % of pay","Participant fee $/yr",
+          "IF safe harbor match","IF 3% non-elective"],h=40)
 K_FIRST=19
+SHM='MIN($B{r},$C$9)*($C$13*MIN($D{r},$D$13)+$C$14*MIN(MAX($D{r}-$D$13,0),$D$14))'
+NEL='MIN($B{r},$C$9)*$C$15'
 for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
     r=K_FIRST+i
     k.cell(row=r,column=1,value=n).font=INK
@@ -442,72 +443,89 @@ for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
     c=k.cell(row=r,column=5,value=f'=IF($C{r}<>"Yes",0,MIN(MIN($B{r},$C$9)*$D{r},$C$10))')
     c.font=INK; c.number_format=CUR
     c=k.cell(row=r,column=6,value=(
-        f'=IF($C{r}<>"Yes",0,'
-        f'IF($C$12="None",0,'
-        f'IF($C$12="Non-elective",MIN($B{r},$C$9)*$C$15,'
-        f'MIN($B{r},$C$9)*($C$13*MIN($D{r},$D$13)+$C$14*MIN(MAX($D{r}-$D$13,0),$D$14)))))'))
+        f'=IF($C{r}<>"Yes",0,IF($C$12="None",0,'
+        f'IF($C$12="Non-elective",$J{r},$I{r})))'))
     c.font=INK; c.number_format=CUR
     c=k.cell(row=r,column=7,value=f"=IF($B{r}=0,0,$F{r}/$B{r})"); c.font=INK; c.number_format=PCT
     c=k.cell(row=r,column=8,value=f'=IF($C{r}<>"Yes",0,$C$7*4)'); c.font=INK; c.number_format=CUR
-    for col in range(1,9): k.cell(row=r,column=col).border=BOX
+    c=k.cell(row=r,column=9,value=f'=IF($C{r}<>"Yes",0,{SHM.format(r=r)})'); c.font=SM; c.number_format=CUR
+    c=k.cell(row=r,column=10,value=f'=IF($C{r}<>"Yes",0,{NEL.format(r=r)})'); c.font=SM; c.number_format=CUR
+    for col in range(1,11): k.cell(row=r,column=col).border=BOX
 K_LAST=K_FIRST+len(EMP)-1
 dvp=DataValidation(type="list",formula1='"Yes,No"',allow_blank=False,showDropDown=False)
 k.add_data_validation(dvp); dvp.add(f"C{K_FIRST}:C{K_LAST}")
-r=K_LAST+1
+r=K_LAST+1; K_TOT=r
 k.cell(row=r,column=1,value="TOTAL").font=BLD
 k.cell(row=r,column=2,value=f"=SUM(B{K_FIRST}:B{K_LAST})").font=BLD
 k.cell(row=r,column=2).number_format=CUR
 k.cell(row=r,column=3,value=f'=COUNTIF(C{K_FIRST}:C{K_LAST},"Yes")&" in"').font=BLD
 k.cell(row=r,column=3).alignment=CTR
-for col,letter in ((5,"E"),(6,"F"),(8,"H")):
+for col,letter in ((5,"E"),(6,"F"),(8,"H"),(9,"I"),(10,"J")):
     c=k.cell(row=r,column=col,value=f"=SUM({letter}{K_FIRST}:{letter}{K_LAST})")
     c.font=BLD; c.number_format=CUR
 c=k.cell(row=r,column=7,value=f"=IF(B{r}=0,0,F{r}/B{r})"); c.font=BLD; c.number_format=PCT
-for col in range(1,9):
+for col in range(1,11):
     k.cell(row=r,column=col).border=BOX; k.cell(row=r,column=col).fill=TOTFILL
-K_TOT=r
 k.cell(row=K_TOT+1,column=1,
-  value="Deferral rates default to 6%, which fully earns the safe harbor basic match. They are an assumption - nobody has elected yet. ADP's own multiple employer plan reports a 7.81% average.").font=SUB
+  value="Deferral rates default to 6%, which fully earns the safe harbor basic match. Nobody has elected anything yet - this is an assumption, and it is what drives the two right-hand columns.").font=SUB
 
-sec(k,K_TOT+3,"3.  WHAT THE 401(k) COSTS ONYX",5)
-hdr(k,K_TOT+4,["Line","Monthly","Annual","Note"])
-KS=[("Employer match",f"=C{K_TOT+5}/12",f"=F{K_TOT}",
-     "Deductible to Onyx. Unlike health premiums, a match for Steven as a >2% S-corp shareholder is a normal deductible plan contribution, not W-2 wages."),
-    ("Participant fees absorbed by Onyx",f"=C{K_TOT+6}/12",f'=IF($C$8="Employer",H{K_TOT},0)',
-     "Zero while the fee sits on participants. Flip 'Fee paid by' to Employer to model Onyx absorbing it."),
-   ]
-for i,(line,mon,ann,note) in enumerate(KS):
+sec(k,K_TOT+3,"3.  THE THREE OPTIONS, PRICED SIDE BY SIDE",6)
+hdr(k,K_TOT+4,["Option","Onyx cost $/yr","Onyx cost $/mo","What it buys"])
+OPT=[("No employer contribution",0,"=B{r}/12",
+      "Cheapest. But the plan is then subject to nondiscrimination testing every year, and once it becomes top-heavy Onyx owes the minimum anyway."),
+     ("Safe harbor basic match (100% of first 3%, 50% of next 2%)",f"=I{K_TOT}","=B{r}/12",
+      "Exempts the plan from nondiscrimination testing and, on its own, from the top-heavy minimum. Only the people who defer receive it."),
+     ("Safe harbor 3% non-elective",f"=J{K_TOT}","=B{r}/12",
+      "Same exemptions. Goes to every participating employee whether or not they defer, so it costs Onyx money for non-savers."),
+    ]
+for i,(opt,ann,mon,note) in enumerate(OPT):
     r=K_TOT+5+i
+    k.cell(row=r,column=1,value=opt).font=BLD if i==0 else INK
+    c=k.cell(row=r,column=2,value=ann); c.font=BLD; c.number_format=CUR
+    c=k.cell(row=r,column=3,value=mon.format(r=r)); c.font=INK; c.number_format=CUR2
+    k.cell(row=r,column=4,value=note).font=SM; k.cell(row=r,column=4).alignment=WRAP
+    k.row_dimensions[r].height=40
+    for col in range(1,5): k.cell(row=r,column=col).border=BOX
+K_OPT=K_TOT+5
+
+sec(k,K_TOT+9,"4.  WHAT ONYX IS ACTUALLY COSTED AT, GIVEN THE MATCH TYPE ABOVE",5)
+hdr(k,K_TOT+10,["Line","Monthly","Annual","Note"])
+KS=[("Employer match / non-elective",f"=F{K_TOT}",
+     "Deductible to Onyx. Unlike health premiums, a contribution for Steven as a >2% S-corp shareholder is a normal deductible plan contribution, not W-2 wages."),
+    ("Participant fees absorbed by Onyx",f'=IF($C$8="Employer",H{K_TOT},0)',
+     "Zero while the fee sits on participants."),
+   ]
+for i,(line,ann,note) in enumerate(KS):
+    r=K_TOT+11+i
     k.cell(row=r,column=1,value=line).font=INK
     c=k.cell(row=r,column=2,value=f"=C{r}/12"); c.font=INK; c.number_format=CUR2
     c=k.cell(row=r,column=3,value=ann); c.font=INK; c.number_format=CUR
     k.cell(row=r,column=4,value=note).font=SM; k.cell(row=r,column=4).alignment=WRAP
     k.row_dimensions[r].height=34
     for col in range(1,5): k.cell(row=r,column=col).border=BOX
-r=K_TOT+7
+r=K_TOT+13; K_COST=r
 k.cell(row=r,column=1,value="ONYX 401(k) COST").font=BLD
-c=k.cell(row=r,column=2,value=f"=SUM(B{K_TOT+5}:B{K_TOT+6})"); c.font=BLD; c.number_format=CUR2
-c=k.cell(row=r,column=3,value=f"=SUM(C{K_TOT+5}:C{K_TOT+6})"); c.font=BLD; c.number_format=CUR
+c=k.cell(row=r,column=2,value=f"=SUM(B{K_TOT+11}:B{K_TOT+12})"); c.font=BLD; c.number_format=CUR2
+c=k.cell(row=r,column=3,value=f"=SUM(C{K_TOT+11}:C{K_TOT+12})"); c.font=BLD; c.number_format=CUR
 for col in range(1,5):
     k.cell(row=r,column=col).border=BOX; k.cell(row=r,column=col).fill=TOTFILL
-K_COST=r
-k.cell(row=r+1,column=1,value=f"Participants pay $0 while the fee stays on them; the total they bear is on row {K_TOT} column H.").font=SUB
 
-sec(k,K_COST+3,"4.  BEFORE ADOPTING",5)
+sec(k,K_COST+2,"5.  IS A MATCH REQUIRED?   No - but read this before choosing None",5)
 for i,t in enumerate([
-  "Steven owns 100%, so the plan is almost certainly top-heavy. A safe harbor design - the tiered match above, or the 3% non-elective - exempts it from the top-heavy minimum. A discretionary match does not.",
-  "Ask Questco whether an adopting employer in their multiple employer plan still claims the SECURE 2.0 start-up credits: up to $5,000/yr for three years, $500/yr for auto-enrolment. Neither Questco nor any other vendor reviewed has answered it.",
-  "Ask for the fund lineup with expense ratios and the target-date series. The $3 per quarter is only the visible fee; the expense ratios are where the rest sits.",
-  "Confirm whether the $3 is billed to Onyx or deducted from participant accounts, and whether the match triggers Questco's $150/hour allocation work or anything like it.",
-  "Confirm the 401(k) does not require annual re-signature by Onyx - the answer that moved this decision forward in the first place.",
+  "NO LAW REQUIRES AN EMPLOYER MATCH. A 401(k) can be deferral-only, funded entirely by employees. Questco's fee does not change either way.",
+  "Two testing rules can still force money in. Nondiscrimination testing compares what the highly compensated defer against what everyone else defers; if the gap is too wide, the highly compensated get deferrals refunded. Steven is highly compensated by ownership and Lisa very likely by pay, so two of five would sit on that side of the test. (The IRS calls these the ADP and ACP tests - an actuarial term that has nothing to do with the payroll company of the same initials.)",
+  "Top-heavy: when key employees hold more than 60% of plan assets, the employer owes a minimum contribution of up to 3% of pay to every non-key employee. With Steven owning 100% this plan is likely to go top-heavy - though usually not in year one, since the test looks at the prior year end and a new plan starts at zero.",
+  "A safe harbor design - the basic match or the 3% non-elective - buys exemption from nondiscrimination testing, and from the top-heavy minimum when the safe harbor contribution is the only employer money in the plan. That is the real trade: a known, capped cost instead of an uncertain one.",
+  "So the practical choice is not match or no match. It is: accept testing and a probable top-heavy bill later, or take a safe harbor now and know the number. Block 3 prices both safe harbor routes.",
+  "Confirm the current-year compensation, deferral and highly-compensated thresholds, and the top-heavy position, with the plan's third-party administrator before adopting.",
+  "Ask Questco whether an adopting employer in their multiple employer plan still claims the SECURE 2.0 start-up credits - up to $5,000/yr for three years plus $500/yr for auto-enrolment. Still unanswered.",
 ]):
-    k.cell(row=K_COST+4+i,column=1,value=u"•  "+t).font=INK
-    k.cell(row=K_COST+4+i,column=1).alignment=WRAP
-    k.row_dimensions[K_COST+4+i].height=28
-for col,w in [("A",40),("B",16),("C",18),("D",60),("E",62),("F",16),("G",17),("H",18)]:
+    c=k.cell(row=K_COST+3+i,column=1,value=u"•  "+t); c.font=INK; c.alignment=WRAP
+    k.row_dimensions[K_COST+3+i].height=32
+for col,w in [("A",58),("B",16),("C",18),("D",62),("E",62),("F",18),("G",15),("H",15),("I",18),("J",18)]:
     k.column_dimensions[col].width=w
 k.sheet_view.showGridLines=False
-print("401k ok  rows", K_FIRST, K_LAST, "cost row", K_COST)
+print("401k ok  rows",K_FIRST,K_LAST,"| TOT",K_TOT,"| OPT",K_OPT,"| cost",K_COST)
 
 # ================= 7. COMBINED =================
 CB=wb.create_sheet("Combined")
