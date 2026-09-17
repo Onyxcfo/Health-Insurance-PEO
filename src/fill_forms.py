@@ -17,7 +17,7 @@ EFF     = "10/01/2026"
 TPA     = "Adrem Administrators"
 TPAFEIN = "87-2258484"
 SIGNER  = "Steven Nikolov"
-TITLE   = "Member"
+TITLE   = "Principal"
 FONT, SZ, COL = "helv", 10.5, (0, 0, 0.6)
 
 def put(page, x, y, text, size=SZ, rotate=0):
