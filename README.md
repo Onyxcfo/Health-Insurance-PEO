@@ -14,6 +14,7 @@ Insperity (PEO) and Angle Health / CapFi (direct level-funded).
 | `adp-questions.html` | Five questions for the ADP meeting, the three quick confirms, and what ADP has already settled. |
 | `angle-hcra-forms/` | The three New York DOH Health Care Reform Act forms for the Angle level-funded plan — DOH-4399 Payor Election, DOH-4264 Electronic Filing User ID, DOH-4403 TPA/ASO Status Change — filled for Onyx. Signature and date left blank. |
 | `pdf/` | Print-ready PDFs of the three HTML documents. The report is landscape so its wide tables are not clipped. Regenerate with `src/topdf.mjs` after any edit. |
+| `Onyx_Angle_Questco_Cost_Model.xlsx` | The live model for the chosen arrangement. Six tabs: Contributions (the only editable cells), Angle Plans, Cost by Tier, By Employee, Questco, Combined. Change a contribution or flip an employee to Yes and every figure recalculates. |
 
 ## src/
 
@@ -25,6 +26,7 @@ Insperity (PEO) and Angle Health / CapFi (direct level-funded).
 | `build_q.py` | Builds the question workbook from `qsheet.py`. |
 | `fill_forms.py` | Fills the three NY DOH HCRA forms from the values at the top of the file. Re-run it if any of them change. |
 | `topdf.mjs` | Renders the three HTML documents to print-ready PDFs. Run it again after editing any of them. |
+| `angle_model.py` | Builds the Angle + Questco cost model. |
 
 ## Contribution basis
 
