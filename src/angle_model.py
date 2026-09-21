@@ -9,15 +9,17 @@ INK=Font(name=F,size=10); BLD=Font(name=F,size=10,bold=True)
 SM=Font(name=F,size=9,color="404040"); SUB=Font(name=F,size=9,italic=True,color="595959")
 BLU=Font(name=F,size=10,color="0000FF"); BLUB=Font(name=F,size=10,bold=True,color="0000FF")
 GRN=Font(name=F,size=10,color="008000"); TTL=Font(name=F,size=15,bold=True)
+GREY=Font(name=F,size=10,color="808080"); GREYI=Font(name=F,size=9,italic=True,color="808080")
 HDF=Font(name=F,size=9,bold=True,color="FFFFFF"); SECF=Font(name=F,size=11,bold=True,color="1D5B72")
 HFILL=PatternFill("solid",fgColor="1D5B72"); YEL=PatternFill("solid",fgColor="FFFF00")
 BAND=PatternFill("solid",fgColor="EFF3F5"); TOTFILL=PatternFill("solid",fgColor="E4E9EA")
+OFFFILL=PatternFill("solid",fgColor="F2F2F2")
 thin=Side(style="thin",color="BFBFBF"); BOX=Border(left=thin,right=thin,top=thin,bottom=thin)
 BOT=Border(bottom=Side(style="thin",color="1D5B72"))
 CUR='$#,##0;($#,##0);-'; CUR2='$#,##0.00;($#,##0.00);-'; PCT='0.0%'
 WRAP=Alignment(wrap_text=True,vertical="top"); CTR=Alignment(horizontal="center")
 
-# vendor, plan, hsa, ded_i, ded_f, oop_i, oop_f, plan_pays, pcp, spec, rx, er, EE, ES, EC, FAM, note
+# plan, hsa, ded_i, ded_f, oop_i, oop_f, plan_pays, pcp, spec, rx, er, EE, ES, EC, FAM, note
 ANGLE=[
  ("ANG HDHP 3400/5000","Y",3400,6800,5000,10000,0.80,"20% after ded","20% after ded","20% after ded (all tiers)","20% after ded",
   439.03,921.97,834.16,1361.00,"CapFi's recommended base plan. Sets the minimum-funding floor."),
@@ -26,8 +28,11 @@ ANGLE=[
  ("ANG TRAD 1000/2000","N",1000,2000,2000,4000,0.80,"$10","$30","$10 / $30","$200",
   546.33,1147.29,1038.02,1693.61,"Best plan design in the whole field - $1,000 deductible, $2,000 out-of-pocket maximum."),
 ]
-TIERS=[("Employee only","EE",300.0),("Employee + spouse","ES",600.0),
-       ("Employee + child(ren)","EC",600.0),("Family","FAM",1000.0)]
+# tier, code, fixed-dollar alternative, include in totals?
+TIERS=[("Employee only","EE",300.0,"Yes"),("Employee + spouse","ES",600.0,"Yes"),
+       ("Employee + child(ren)","EC",600.0,"No"),("Family","FAM",1000.0,"Yes")]
+PCOL={"EE":"L","ES":"M","EC":"N","FAM":"O"}
+PCT_DEFAULT=0.50
 EMP=[("Steven Nikolov",186000,"Family","FAM","Yes","100% owner. >2% S-corp shareholder - premiums cannot run pretax through the cafeteria plan (IRC 1372)."),
      ("Lisa Danforth",178094,"Employee only","EE","Yes",""),
      ("Jessica Bumphus",135000,"Family","FAM","Yes","New hire."),
@@ -52,70 +57,107 @@ a["A2"].font=SUB
 a["A3"]="EDIT THE YELLOW CELLS ONLY. Every other number on every tab recalculates from them."
 a["A3"].font=Font(name=F,size=10,bold=True,color="8E2F2A")
 
-sec(a,5,"1.  ONYX MONTHLY CONTRIBUTION BY TIER   <- this is the lever")
-hdr(a,6,["Tier","Code","Onyx pays $/mo","Onyx pays $/yr","Angle minimum funding $/mo","Clears the minimum?"])
-for i,(name,code,amt) in enumerate(TIERS):
-    r=7+i
-    a.cell(row=r,column=1,value=name).font=INK
-    a.cell(row=r,column=2,value=code).font=INK; a.cell(row=r,column=2).alignment=CTR
-    c=a.cell(row=r,column=3,value=amt); c.font=BLUB; c.fill=YEL; c.number_format=CUR2
-    c=a.cell(row=r,column=4,value=f"=C{r}*12"); c.font=INK; c.number_format=CUR
-    c=a.cell(row=r,column=5,value="=$C$16"); c.font=GRN; c.number_format=CUR2
-    c=a.cell(row=r,column=6,value=f'=IF(C{r}>=E{r},"Yes","NO - below Angle minimum")')
-    c.font=INK; c.alignment=CTR
-    for col in range(1,7): a.cell(row=r,column=col).border=BOX
-a["A12"]="Fixed dollars, medical only. Dental and vision are not offered by Angle; life, LTD and STD are quoted separately by Questco on the Questco tab."
-a["A12"].font=SUB
+sec(a,5,"1.  HOW ONYX FUNDS THE PREMIUM   <- the master switch")
+a["A6"]="Contribution basis"; a["A6"].font=BLD
+c=a["C6"]; c.value="Percent of premium"; c.font=BLUB; c.fill=YEL
+dvb=DataValidation(type="list",formula1='"Percent of premium,Fixed dollars"',allow_blank=False,showDropDown=False)
+a.add_data_validation(dvb); dvb.add("C6")
+for col in range(1,4): a.cell(row=6,column=col).border=BOX
+a["A7"]=("On 'Percent of premium' Onyx pays the percentage in column D of whatever plan the employee elects, so Onyx's cost moves with "
+         "the plan. On 'Fixed dollars' Onyx pays the flat amount in column E and the employee absorbs the whole difference between plans. "
+         "Either way Onyx never pays less than Angle's minimum funding, and never more than the premium itself.")
+a["A7"].font=SUB
 
-sec(a,14,"2.  ANGLE MINIMUM FUNDING REQUIREMENT")
-a["A15"]="Percentage of the lowest employee-only rate"; a["A15"].font=INK
-c=a["C15"]; c.value=0.50; c.font=BLUB; c.fill=YEL; c.number_format=PCT
-a["A16"]="Minimum Onyx must fund, per enrolled employee, per month"; a["A16"].font=BLD
-c=a["C16"]; c.value="=C15*MIN('Angle Plans'!L5:L7)"; c.font=BLD; c.number_format=CUR2
-a["A17"]="Minimum total funding at current enrollment, per year"; a["A17"].font=INK
-c=a["C17"]; c.value="=C16*C34*12"; c.font=INK; c.number_format=CUR
-a["A18"]=("Angle's own presentation states minimum funding of $10,536.96/yr - 50% of the HDHP 3400/5000's $439.03 employee-only "
+sec(a,9,"2.  ONYX CONTRIBUTION BY TIER   <- the lever")
+hdr(a,10,["Tier","Code","Include in totals?","Onyx % of premium","Onyx fixed $/mo (used only on the Fixed dollars basis)",
+          "Angle minimum $/mo","Lowest premium in this tier","Status at the current basis"],h=44)
+for i,(name,code,amt,inc) in enumerate(TIERS):
+    r=11+i; pc=PCOL[code]
+    a.cell(row=r,column=1,value=name).font=INK if inc=="Yes" else GREY
+    a.cell(row=r,column=2,value=code).font=INK if inc=="Yes" else GREY
+    a.cell(row=r,column=2).alignment=CTR
+    c=a.cell(row=r,column=3,value=inc); c.font=BLUB; c.fill=YEL; c.alignment=CTR
+    c=a.cell(row=r,column=4,value=PCT_DEFAULT); c.font=BLUB; c.fill=YEL; c.number_format=PCT
+    c=a.cell(row=r,column=5,value=amt); c.font=BLUB; c.fill=YEL; c.number_format=CUR2
+    c=a.cell(row=r,column=6,value="=$C$20"); c.font=GRN; c.number_format=CUR2
+    c=a.cell(row=r,column=7,value=f"=MIN('Angle Plans'!${pc}$5:${pc}$7)"); c.font=GRN; c.number_format=CUR2
+    c=a.cell(row=r,column=8,value=(
+        f'=IF($C{r}<>"Yes","Excluded - carried for history, not counted anywhere",'
+        f'IF($C$6="Fixed dollars",IF($E{r}>=$F{r},"Funded at the fixed amount","Topped up to the Angle minimum"),'
+        f'IF($D{r}*$G{r}>=$F{r},"Funded at the percentage","Topped up to the Angle minimum on the cheapest plan")))'))
+    c.font=SM; c.alignment=WRAP
+    a.row_dimensions[r].height=26
+    for col in range(1,9): a.cell(row=r,column=col).border=BOX
+    if inc!="Yes":
+        for col in range(1,9): a.cell(row=r,column=col).fill=OFFFILL
+        a.cell(row=r,column=3).fill=YEL
+dvi=DataValidation(type="list",formula1='"Yes,No"',allow_blank=False,showDropDown=False)
+a.add_data_validation(dvi); dvi.add("C11:C14")
+a["A15"]=("Employee + child(ren) is set to No because nobody is expected to elect it. Its rates and economics stay on every tab for the "
+          "record, but it is excluded from every total for Onyx and for employees. Switch column C to Yes if that changes.")
+a["A15"].font=Font(name=F,size=9,italic=True,color="8E2F2A")
+a["A16"]="Medical only. Angle offers no dental or vision; life, LTD and STD are quoted separately by Questco on the Questco tab."
+a["A16"].font=SUB
+
+sec(a,18,"3.  ANGLE MINIMUM FUNDING REQUIREMENT",3)
+a["A19"]="Percentage of the lowest employee-only rate"; a["A19"].font=INK
+c=a["C19"]; c.value=0.50; c.font=BLUB; c.fill=YEL; c.number_format=PCT
+a["A20"]="Minimum Onyx must fund, per enrolled employee, per month"; a["A20"].font=BLD
+c=a["C20"]; c.value="=C19*MIN('Angle Plans'!L5:L7)"; c.font=BLD; c.number_format=CUR2
+a["A21"]="Minimum total funding at current enrollment, per year"; a["A21"].font=INK
+c=a["C21"]; c.value="=C20*D40*12"; c.font=INK; c.number_format=CUR
+a["A22"]=("Angle's own presentation states minimum funding of $10,536.96/yr - 50% of the HDHP 3400/5000's $439.03 employee-only "
           "rate across four enrolled employees. The formula above lands at $10,536.72; the 24-cent difference is Angle rounding the "
           "monthly floor to $219.52.")
-a["A18"].font=SUB
-for r in (15,16,17):
+a["A22"].font=SUB
+for r in (19,20,21):
     for col in range(1,4): a.cell(row=r,column=col).border=BOX
+MINCELL="Contributions!$C$20"
+PCTRNG="Contributions!$D$11:$D$14"; FIXRNG="Contributions!$E$11:$E$14"
+INCRNG="Contributions!$C$11:$C$14"; CODERNG="Contributions!$B$11:$B$14"
+BASIS="Contributions!$C$6"
 
-sec(a,20,"3.  WHO IS ENROLLED   <- change Yes/No to re-run the whole model")
-hdr(a,21,["Employee","Annual pay","Medical tier","Code","Enrolling?","Note"])
+sec(a,24,"4.  WHO IS ENROLLED   <- change Yes/No to re-run the whole model")
+hdr(a,25,["Employee","Annual pay","Medical tier","Code","Enrolling?","","","Note"])
+EMP_FIRST=26; EMP_LAST=26+len(EMP)-1
 for i,(n,pay,tier,code,yn,note) in enumerate(EMP):
-    r=22+i
+    r=EMP_FIRST+i
     a.cell(row=r,column=1,value=n).font=INK
     c=a.cell(row=r,column=2,value=pay); c.font=BLU; c.number_format=CUR
     a.cell(row=r,column=3,value=tier).font=INK
     a.cell(row=r,column=4,value=code).font=BLU; a.cell(row=r,column=4).alignment=CTR
     c=a.cell(row=r,column=5,value=yn); c.font=BLUB; c.fill=YEL; c.alignment=CTR
-    a.cell(row=r,column=6,value=note).font=SM; a.cell(row=r,column=6).alignment=WRAP
+    a.cell(row=r,column=8,value=note).font=SM; a.cell(row=r,column=8).alignment=WRAP
     a.row_dimensions[r].height=26
-    for col in range(1,7): a.cell(row=r,column=col).border=BOX
+    for col in list(range(1,6))+[8]: a.cell(row=r,column=col).border=BOX
 dv=DataValidation(type="list",formula1='"Yes,No"',allow_blank=False,showDropDown=False)
-a.add_data_validation(dv); dv.add("E22:E26")
-EMP_FIRST,EMP_LAST=22,26
+a.add_data_validation(dv); dv.add(f"E{EMP_FIRST}:E{EMP_LAST}")
+ENR_CODE=f"Contributions!$D${EMP_FIRST}:$D${EMP_LAST}"
+ENR_YN=f"Contributions!$E${EMP_FIRST}:$E${EMP_LAST}"
 
-sec(a,28,"4.  ENROLLMENT AND COST AT THE CURRENT SETTINGS")
-hdr(a,29,["Tier","Code","Enrolled","Onyx $/mo","Onyx $/yr"])
-for i,(name,code,_a) in enumerate(TIERS):
-    r=30+i
+sec(a,33,"5.  ENROLLMENT AT THE CURRENT SETTINGS",5)
+hdr(a,34,["Tier","Code","Include in totals?","Enrolled","Counted in totals"])
+for i,(name,code,_amt,_inc) in enumerate(TIERS):
+    r=35+i
     a.cell(row=r,column=1,value=name).font=INK
     a.cell(row=r,column=2,value=code).font=INK; a.cell(row=r,column=2).alignment=CTR
-    c=a.cell(row=r,column=3,value=f'=COUNTIFS($D${EMP_FIRST}:$D${EMP_LAST},B{r},$E${EMP_FIRST}:$E${EMP_LAST},"Yes")')
-    c.font=INK; c.alignment=CTR
-    c=a.cell(row=r,column=4,value=f"=C{r}*INDEX($C$7:$C$10,MATCH(B{r},$B$7:$B$10,0))"); c.font=INK; c.number_format=CUR2
-    c=a.cell(row=r,column=5,value=f"=D{r}*12"); c.font=INK; c.number_format=CUR
+    c=a.cell(row=r,column=3,value=f"=$C${11+i}"); c.font=GRN; c.alignment=CTR
+    c=a.cell(row=r,column=4,value=f'=COUNTIFS({ENR_CODE},$B{r},{ENR_YN},"Yes")'); c.font=INK; c.alignment=CTR
+    c=a.cell(row=r,column=5,value=f'=IF($C{r}="Yes",$D{r},0)'); c.font=INK; c.alignment=CTR
     for col in range(1,6): a.cell(row=r,column=col).border=BOX
-r=34
+    if TIERS[i][3]!="Yes":
+        for col in range(1,6): a.cell(row=r,column=col).fill=OFFFILL
+r=39
 a.cell(row=r,column=1,value="TOTAL").font=BLD
-c=a.cell(row=r,column=3,value="=SUM(C30:C33)"); c.font=BLD; c.alignment=CTR
-c=a.cell(row=r,column=4,value="=SUM(D30:D33)"); c.font=BLD; c.number_format=CUR2
-c=a.cell(row=r,column=5,value="=SUM(E30:E33)"); c.font=BLD; c.number_format=CUR
+c=a.cell(row=r,column=4,value="=SUM(D35:D38)"); c.font=BLD; c.alignment=CTR
+c=a.cell(row=r,column=5,value="=SUM(E35:E38)"); c.font=BLD; c.alignment=CTR
 for col in range(1,6):
     a.cell(row=r,column=col).border=BOX; a.cell(row=r,column=col).fill=TOTFILL
-for col,w in [("A",42),("B",11),("C",17),("D",17),("E",22),("F",62)]:
+a["D40"]="=D39"; a["D40"].font=Font(name=F,size=9,color="FFFFFF")
+a["A41"]=("Dollar totals now live on the Elections tab, because on the percentage basis Onyx's cost depends on which plan each person "
+          "actually elects. This block counts heads only.")
+a["A41"].font=SUB
+for col,w in [("A",44),("B",10),("C",17),("D",16),("E",20),("F",16),("G",20),("H",54)]:
     a.column_dimensions[col].width=w
 a.sheet_view.showGridLines=False
 print("contributions ok")
@@ -142,18 +184,18 @@ for i,row in enumerate(ANGLE):
         for j in range(16): p.cell(row=r,column=1+j).fill=BAND
 p["A9"]="Every cell above is transcribed from the CapFi / Angle Health presentation, quote 400798, underwritten 7/30/2026."
 p["A9"].font=SUB
+p["A10"]="The EC column is retained for the record. It is excluded from every total - see column C of the Contributions tab."
+p["A10"].font=GREYI
 for col,w in [("A",24),("B",6),("C",13),("D",13),("E",15),("F",15),("G",12),("H",15),("I",15),
               ("J",22),("K",15),("L",11),("M",11),("N",11),("O",11),("P",50)]:
     p.column_dimensions[col].width=w
 p.freeze_panes="B5"; p.sheet_view.showGridLines=False
 print("plans ok")
-wb.save("_stage1.xlsx"); print("stage 1 saved")
 
 # ================= 3. COST BY TIER =================
 PL="'Angle Plans'!"
 PN=f"{PL}$A$5:$A$7"; PPREM=f"{PL}$L$5:$O$7"; PHDR=f"{PL}$L$4:$O$4"
 PDI=f"{PL}$C$5:$C$7"; PDF=f"{PL}$D$5:$D$7"; POI=f"{PL}$E$5:$E$7"; POF=f"{PL}$F$5:$F$7"
-CN="Contributions!"
 
 c3=wb.create_sheet("Cost by Tier")
 c3["A1"]="What each Angle plan costs Onyx and the employee"; c3["A1"].font=TTL
@@ -161,109 +203,179 @@ c3["A2"]=("Onyx pays the greater of its tier contribution and Angle's minimum fu
           "Worst case = the employee's annual premium plus that household's in-network out-of-pocket maximum; premiums never count "
           "toward an out-of-pocket maximum, so the two add without overlapping.")
 c3["A2"].font=SUB
-hdr(c3,4,["Plan","Tier","Code","Enrolled","Monthly premium","Onyx contribution $/mo","Angle minimum $/mo",
-          "Onyx pays $/mo","Employee pays $/mo","Onyx share","Onyx $/yr (all enrolled)","Employee $/yr (each)",
-          "Deductible","OOP max","Worst case $/yr (each)"],h=40)
+c3["A3"]=("Rows whose tier is excluded on the Contributions tab keep their per-person economics for the record but carry zero enrolled, "
+          "so they add nothing to any total.")
+c3["A3"].font=GREYI
+hdr(c3,4,["Plan","Tier","Code","In totals?","Enrolled","Monthly premium","Onyx contribution $/mo","Angle minimum $/mo",
+          "Onyx pays $/mo (each)","Employee pays $/mo (each)","Onyx share","Onyx $/mo (all enrolled)","Onyx $/yr (all enrolled)",
+          "Employee $/mo (all in tier)","Employee $/yr (all in tier)","Employee $/yr (each)",
+          "Deductible","OOP max","Worst case $/yr (each)"],h=48)
 r=5; CT_FIRST=5
 for pi,row in enumerate(ANGLE):
-    for tname,tcode,_t in TIERS:
+    for tname,tcode,_t,_inc in TIERS:
         c3.cell(row=r,column=1,value=row[0]).font=INK
         c3.cell(row=r,column=2,value=tname).font=INK
         c3.cell(row=r,column=3,value=tcode).font=INK; c3.cell(row=r,column=3).alignment=CTR
         f={
-         "D":f'=COUNTIFS({CN}$D$22:$D$26,$C{r},{CN}$E$22:$E$26,"Yes")',
-         "E":f"=INDEX({PPREM},MATCH($A{r},{PN},0),MATCH($C{r},{PHDR},0))",
-         "F":f"=INDEX({CN}$C$7:$C$10,MATCH($C{r},{CN}$B$7:$B$10,0))",
-         "G":f"={CN}$C$16",
-         "H":f"=MIN($E{r},MAX($F{r},$G{r}))",
-         "I":f"=$E{r}-$H{r}",
-         "J":f"=IF($E{r}=0,0,$H{r}/$E{r})",
-         "K":f"=$H{r}*$D{r}*12",
-         "L":f"=$I{r}*12",
-         "M":f'=IF($C{r}="EE",INDEX({PDI},MATCH($A{r},{PN},0)),INDEX({PDF},MATCH($A{r},{PN},0)))',
-         "N":f'=IF($C{r}="EE",INDEX({POI},MATCH($A{r},{PN},0)),INDEX({POF},MATCH($A{r},{PN},0)))',
-         "O":f"=$L{r}+$N{r}",
+         "D":f"=INDEX({INCRNG},MATCH($C{r},{CODERNG},0))",
+         "E":f'=IF($D{r}<>"Yes",0,COUNTIFS({ENR_CODE},$C{r},{ENR_YN},"Yes"))',
+         "F":f"=INDEX({PPREM},MATCH($A{r},{PN},0),MATCH($C{r},{PHDR},0))",
+         "G":(f'=IF({BASIS}="Fixed dollars",INDEX({FIXRNG},MATCH($C{r},{CODERNG},0)),'
+              f"INDEX({PCTRNG},MATCH($C{r},{CODERNG},0))*$F{r})"),
+         "H":f"={MINCELL}",
+         "I":f"=MIN($F{r},MAX($G{r},$H{r}))",
+         "J":f"=$F{r}-$I{r}",
+         "K":f"=IF($F{r}=0,0,$I{r}/$F{r})",
+         "L":f"=$I{r}*$E{r}",
+         "M":f"=$L{r}*12",
+         "N":f"=$J{r}*$E{r}",
+         "O":f"=$N{r}*12",
+         "P":f"=$J{r}*12",
+         "Q":f'=IF($C{r}="EE",INDEX({PDI},MATCH($A{r},{PN},0)),INDEX({PDF},MATCH($A{r},{PN},0)))',
+         "R":f'=IF($C{r}="EE",INDEX({POI},MATCH($A{r},{PN},0)),INDEX({POF},MATCH($A{r},{PN},0)))',
+         "S":f"=$P{r}+$R{r}",
+         "T":f'=$A{r}&"|"&$C{r}',
         }
         for col,formula in f.items():
             cell=c3[f"{col}{r}"]; cell.value=formula
-            cell.font=GRN if col in ("E","F","G","M","N") else INK
-        for col in ("E","F","G","H","I"): c3[f"{col}{r}"].number_format=CUR2
-        for col in ("K","L","M","N","O"): c3[f"{col}{r}"].number_format=CUR
-        c3[f"J{r}"].number_format=PCT
-        c3[f"D{r}"].alignment=CTR
-        c3[f"O{r}"].font=Font(name=F,size=10,bold=True)
-        for col in range(1,16): c3.cell(row=r,column=col).border=BOX
-        if tcode in ("ES","FAM"):
-            for col in range(1,16): c3.cell(row=r,column=col).fill=BAND
+            cell.font=GRN if col in ("D","F","G","H","Q","R") else INK
+        for col in ("F","G","H","I","J","L","N"): c3[f"{col}{r}"].number_format=CUR2
+        for col in ("M","O","P","Q","R","S"): c3[f"{col}{r}"].number_format=CUR
+        c3[f"K{r}"].number_format=PCT
+        c3[f"D{r}"].alignment=CTR; c3[f"E{r}"].alignment=CTR
+        c3[f"S{r}"].font=Font(name=F,size=10,bold=True)
+        for col in range(1,20): c3.cell(row=r,column=col).border=BOX
+        if tcode=="EC":
+            for col in range(1,20):
+                c3.cell(row=r,column=col).fill=OFFFILL
+                if c3.cell(row=r,column=col).font.color is None or c3.cell(row=r,column=col).font.color.rgb=="FF000000":
+                    c3.cell(row=r,column=col).font=GREY
+        elif tcode in ("ES","FAM"):
+            for col in range(1,20): c3.cell(row=r,column=col).fill=BAND
         r+=1
 CT_LAST=r-1
 c3.cell(row=CT_LAST+2,column=1,
   value=("HSA funding is deliberately not modeled. On the HDHP 3400/5000 an employee can pay part of that worst case with pretax "
          "dollars, so the real cost is lower - but by an amount only the employee controls.")).font=SUB
 c3.cell(row=CT_LAST+3,column=1,
-  value="'Onyx $/yr (all enrolled)' multiplies by how many people sit in that tier, so the column sums to Onyx's whole medical spend.").font=SUB
-for col,w in [("A",24),("B",21),("C",7),("D",10),("E",14),("F",16),("G",15),("H",13),("I",15),
-              ("J",11),("K",19),("L",17),("M",13),("N",13),("O",18)]:
+  value=("The 'all enrolled' and 'all in tier' columns multiply by how many people sit in that tier, so they sum to the whole spend "
+         "IF every enrolled employee took that one plan. Actual elections are on the Elections tab.")).font=SUB
+c3.cell(row=4,column=20,value="Row key").font=HDF
+c3.cell(row=4,column=20).fill=HFILL; c3.cell(row=4,column=20).border=BOX
+for col,w in [("A",24),("B",21),("C",7),("D",11),("E",10),("F",14),("G",16),("H",15),("I",15),("J",16),
+              ("K",11),("L",17),("M",17),("N",17),("O",17),("P",16),("Q",13),("R",13),("S",18)]:
     c3.column_dimensions[col].width=w
+c3.column_dimensions["T"].width=30; c3.column_dimensions["T"].hidden=True
 c3.freeze_panes="D5"; c3.sheet_view.showGridLines=False
-c3.auto_filter.ref=f"A4:O{CT_LAST}"
+c3.auto_filter.ref=f"A4:S{CT_LAST}"
+wb.defined_names.add(openpyxl.workbook.defined_name.DefinedName(
+    "CostKey", attr_text=f"'Cost by Tier'!$T${CT_FIRST}:$T${CT_LAST}"))
+CT="'Cost by Tier'!"
+KEYM='MATCH($E{r}&"|"&$D{r},CostKey,0)'
 print("cost by tier ok", CT_FIRST, CT_LAST)
 
-# ================= 4. BY EMPLOYEE =================
+# ================= 4. ELECTIONS =================
+el=wb.create_sheet("Elections")
+el["A1"]="Final elections - what each person actually chose"; el["A1"].font=TTL
+el["A2"]=("This is the authoritative cost to Onyx. Pick each person's plan in the yellow column; the Combined tab's medical lines "
+          "read the TOTAL row below.")
+el["A2"].font=SUB
+el["A3"]="EDIT THE YELLOW CELLS. Enrolling? and tier come from the Contributions tab."
+el["A3"].font=Font(name=F,size=10,bold=True,color="8E2F2A")
+sec(el,5,"FINAL PLAN SELECTION BY PERSON",13)
+hdr(el,6,["Employee","Enrolling?","Tier","Code","ELECTED PLAN","In totals?","Monthly premium",
+          "Onyx $/mo","Employee $/mo","Total $/mo","Onyx $/yr","Employee $/yr","Total $/yr"],h=40)
+EL_FIRST=7
+for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
+    r=EL_FIRST+i; m=KEYM.format(r=r)
+    gate=f'IF(OR($B{r}<>"Yes",$F{r}<>"Yes"),0,'
+    el.cell(row=r,column=1,value=n).font=INK
+    c=el.cell(row=r,column=2,value=f"=Contributions!$E${EMP_FIRST+i}"); c.font=GRN; c.alignment=CTR
+    el.cell(row=r,column=3,value=tier).font=INK
+    c=el.cell(row=r,column=4,value=f"=Contributions!$D${EMP_FIRST+i}"); c.font=GRN; c.alignment=CTR
+    c=el.cell(row=r,column=5,value=ANGLE[0][0]); c.font=BLUB; c.fill=YEL
+    c=el.cell(row=r,column=6,value=f"=INDEX({INCRNG},MATCH($D{r},{CODERNG},0))"); c.font=GRN; c.alignment=CTR
+    c=el.cell(row=r,column=7,value=f"=INDEX({CT}$F${CT_FIRST}:$F${CT_LAST},{m})"); c.font=GRN; c.number_format=CUR2
+    c=el.cell(row=r,column=8,value=f"={gate}INDEX({CT}$I${CT_FIRST}:$I${CT_LAST},{m}))"); c.font=INK; c.number_format=CUR2
+    c=el.cell(row=r,column=9,value=f"={gate}INDEX({CT}$J${CT_FIRST}:$J${CT_LAST},{m}))"); c.font=INK; c.number_format=CUR2
+    c=el.cell(row=r,column=10,value=f"=$H{r}+$I{r}"); c.font=BLD; c.number_format=CUR2
+    c=el.cell(row=r,column=11,value=f"=$H{r}*12"); c.font=INK; c.number_format=CUR
+    c=el.cell(row=r,column=12,value=f"=$I{r}*12"); c.font=INK; c.number_format=CUR
+    c=el.cell(row=r,column=13,value=f"=$J{r}*12"); c.font=BLD; c.number_format=CUR
+    el.row_dimensions[r].height=22
+    for col in range(1,14): el.cell(row=r,column=col).border=BOX
+    if yn!="Yes":
+        for col in range(1,14): el.cell(row=r,column=col).fill=BAND
+        el.cell(row=r,column=5).fill=YEL
+EL_LAST=EL_FIRST+len(EMP)-1
+dvp=DataValidation(type="list",formula1='"{}"'.format(",".join(x[0] for x in ANGLE)),
+                   allow_blank=False,showDropDown=False)
+el.add_data_validation(dvp); dvp.add(f"E{EL_FIRST}:E{EL_LAST}")
+EL_TOT=EL_LAST+1
+el.cell(row=EL_TOT,column=1,value="TOTAL - ONYX AND EMPLOYEES").font=BLD
+c=el.cell(row=EL_TOT,column=2,value=f'=COUNTIF(B{EL_FIRST}:B{EL_LAST},"Yes")&" enrolled"'); c.font=BLD; c.alignment=CTR
+for col,letter,fmt in ((8,"H",CUR2),(9,"I",CUR2),(10,"J",CUR2),(11,"K",CUR),(12,"L",CUR),(13,"M",CUR)):
+    c=el.cell(row=EL_TOT,column=col,value=f"=SUM({letter}{EL_FIRST}:{letter}{EL_LAST})")
+    c.font=BLD; c.number_format=fmt
+for col in range(1,14):
+    el.cell(row=EL_TOT,column=col).border=BOX; el.cell(row=EL_TOT,column=col).fill=TOTFILL
+el.cell(row=EL_TOT+2,column=1,value="ONYX - MONTHLY").font=BLD
+c=el.cell(row=EL_TOT+2,column=3,value=f"=$H${EL_TOT}"); c.font=BLD; c.number_format=CUR2
+el.cell(row=EL_TOT+3,column=1,value="ONYX - ANNUAL").font=BLD
+c=el.cell(row=EL_TOT+3,column=3,value=f"=$K${EL_TOT}"); c.font=BLD; c.number_format=CUR
+el.cell(row=EL_TOT+4,column=1,value="Employees - monthly").font=INK
+c=el.cell(row=EL_TOT+4,column=3,value=f"=$I${EL_TOT}"); c.font=INK; c.number_format=CUR2
+el.cell(row=EL_TOT+5,column=1,value="Employees - annual").font=INK
+c=el.cell(row=EL_TOT+5,column=3,value=f"=$L${EL_TOT}"); c.font=INK; c.number_format=CUR
+for rr in range(EL_TOT+2,EL_TOT+6):
+    for col in range(1,4): el.cell(row=rr,column=col).border=BOX
+for rr in (EL_TOT+2,EL_TOT+3):
+    for col in range(1,4): el.cell(row=rr,column=col).fill=TOTFILL
+el.cell(row=EL_TOT+7,column=1,value=(
+  "A person whose tier is excluded on the Contributions tab, or who is not enrolling, shows $0 on both sides - their premium still "
+  "displays so the record is complete.")).font=SUB
+el.cell(row=EL_TOT+8,column=1,value=(
+  "Everyone defaults to the HDHP 3400/5000. Change the ELECTED PLAN cells as people choose; nothing else needs touching.")).font=SUB
+for col,w in [("A",30),("B",13),("C",21),("D",8),("E",24),("F",11),("G",16),("H",14),("I",16),("J",14),("K",14),("L",16),("M",14)]:
+    el.column_dimensions[col].width=w
+el.freeze_panes="F7"; el.sheet_view.showGridLines=False
+print("elections ok", EL_FIRST, EL_LAST, EL_TOT)
+
+# ================= 5. BY EMPLOYEE =================
 e=wb.create_sheet("By Employee")
 e["A1"]="Every Angle plan, priced for each person"; e["A1"].font=TTL
-e["A2"]="Driven by the enrollment table on the Contributions tab. Anyone marked No shows a blank deduction - change them to Yes to price them in."
+e["A2"]="What each plan would cost each person. The plan actually chosen is on the Elections tab; this grid is the menu behind it."
 e["A2"].font=SUB
-hdr(e,4,["Employee","Enrolling?","Tier","Code","Plan","Monthly premium","Onyx pays $/mo",
+hdr(e,4,["Employee","Enrolling?","Tier","Code","Plan","In totals?","Monthly premium","Onyx pays $/mo",
          "Employee $/mo","Employee $/yr","Deductible","OOP max","Worst case $/yr"],h=34)
 r=5; E_FIRST=5
 for ei,(n,pay,tier,code,yn,_note) in enumerate(EMP):
     for row in ANGLE:
-        key=f'"{row[0]}"'
+        m=f'MATCH($E{r}&"|"&$D{r},CostKey,0)'
         e.cell(row=r,column=1,value=n).font=INK
-        e[f"B{r}"]=f"={CN}$E${22+ei}"; e[f"B{r}"].font=GRN; e[f"B{r}"].alignment=CTR
+        e[f"B{r}"]=f"=Contributions!$E${EMP_FIRST+ei}"; e[f"B{r}"].font=GRN; e[f"B{r}"].alignment=CTR
         e.cell(row=r,column=3,value=tier).font=INK
         e.cell(row=r,column=4,value=code).font=INK; e.cell(row=r,column=4).alignment=CTR
         e.cell(row=r,column=5,value=row[0]).font=INK
-        m=f'MATCH($E{r}&"|"&$D{r},CostKey,0)'
-        for col,src in [("F","E"),("G","H"),("H","I"),("I","L"),("J","M"),("K","N"),("L","O")]:
-            e[f"{col}{r}"]=f"=INDEX('Cost by Tier'!${src}${CT_FIRST}:${src}${CT_LAST},{m})"
+        for col,src in [("F","D"),("G","F"),("H","I"),("I","J"),("J","P"),("K","Q"),("L","R"),("M","S")]:
+            e[f"{col}{r}"]=f"=INDEX({CT}${src}${CT_FIRST}:${src}${CT_LAST},{m})"
             e[f"{col}{r}"].font=GRN
-        for col in ("F","G","H"): e[f"{col}{r}"].number_format=CUR2
-        for col in ("I","J","K","L"): e[f"{col}{r}"].number_format=CUR
-        e[f"L{r}"].font=Font(name=F,size=10,bold=True,color="008000")
-        for col in range(1,13): e.cell(row=r,column=col).border=BOX
+        e[f"F{r}"].alignment=CTR
+        for col in ("G","H","I"): e[f"{col}{r}"].number_format=CUR2
+        for col in ("J","K","L","M"): e[f"{col}{r}"].number_format=CUR
+        e[f"M{r}"].font=Font(name=F,size=10,bold=True,color="008000")
+        for col in range(1,14): e.cell(row=r,column=col).border=BOX
         if yn!="Yes":
-            for col in range(1,13): e.cell(row=r,column=col).fill=BAND
+            for col in range(1,14): e.cell(row=r,column=col).fill=BAND
         r+=1
 E_LAST=r-1
-for col,w in [("A",22),("B",11),("C",21),("D",7),("E",24),("F",14),("G",14),("H",14),("I",14),("J",13),("K",13),("L",16)]:
+for col,w in [("A",22),("B",11),("C",21),("D",7),("E",24),("F",11),("G",14),("H",14),("I",14),("J",14),("K",13),("L",13),("M",16)]:
     e.column_dimensions[col].width=w
-e.freeze_panes="F5"; e.sheet_view.showGridLines=False
-e.auto_filter.ref=f"A4:L{E_LAST}"
-# helper key column on Cost by Tier for the lookup above
-c3.cell(row=4,column=17,value="Row key").font=HDF
-c3.cell(row=4,column=17).fill=HFILL; c3.cell(row=4,column=17).border=BOX
-for rr in range(CT_FIRST,CT_LAST+1):
-    c3[f"Q{rr}"]=f'=$A{rr}&"|"&$C{rr}'; c3[f"Q{rr}"].font=INK; c3[f"Q{rr}"].border=BOX
-c3.column_dimensions["Q"].width=30; c3.column_dimensions["Q"].hidden=True
-wb.defined_names.add(openpyxl.workbook.defined_name.DefinedName(
-    "CostKey", attr_text=f"'Cost by Tier'!$Q${CT_FIRST}:$Q${CT_LAST}"))
+e.freeze_panes="G5"; e.sheet_view.showGridLines=False
+e.auto_filter.ref=f"A4:M{E_LAST}"
 print("by employee ok", E_FIRST, E_LAST)
-wb.save("_stage2.xlsx"); print("stage 2 saved")
 
-# --- add an all-enrolled employee-cost column to Cost by Tier (col P) ---
-hp=c3.cell(row=4,column=16,value="Employee $/yr (all in tier)")
-hp.font=HDF; hp.fill=HFILL; hp.border=BOX
-hp.alignment=Alignment(horizontal="center",vertical="center",wrap_text=True)
-for rr in range(CT_FIRST,CT_LAST+1):
-    cell=c3[f"P{rr}"]; cell.value=f"=$I{rr}*$D{rr}*12"; cell.font=INK
-    cell.number_format=CUR; cell.border=BOX
-    if c3[f"C{rr}"].value in ("ES","FAM"): cell.fill=BAND
-c3.column_dimensions["P"].width=18
-c3.auto_filter.ref=f"A4:P{CT_LAST}"
-
-# ================= 5. QUESTCO =================
+# ================= 6. QUESTCO =================
 q=wb.create_sheet("Questco")
 q["A1"]="Questco - PEO services other than medical"; q["A1"].font=TTL
 q["A2"]="IRS-Certified PEO. Quote dated for 5 worksite employees on $658,322 of annual payroll. Medical is declined - Onyx takes Angle instead."
@@ -279,14 +391,14 @@ QR=[("Administrative fee","Per active employee per month",117.00,"Required",
     ("Cyber liability","Annual premium",420.00,"No",
      "$250,000 aggregate, $1,000 per-claim retention, $50,000 sub-limits. Set to No - Onyx is placing cyber separately. A standalone policy is the right call for a firm holding client tax data under the FTC Safeguards Rule and IRS Pub 4557."),
    ]
-for i,(line,basis,rate,el,note) in enumerate(QR):
+for i,(line,basis,rate,el2,note) in enumerate(QR):
     r=6+i
     q.cell(row=r,column=1,value=line).font=INK
     q.cell(row=r,column=2,value=basis).font=SM
     c=q.cell(row=r,column=3,value=rate); c.font=BLUB; c.fill=YEL; c.number_format=CUR2
-    c=q.cell(row=r,column=5,value=el); c.alignment=CTR
-    c.font=SM if el=="Required" else BLUB
-    if el!="Required": c.fill=YEL
+    c=q.cell(row=r,column=5,value=el2); c.alignment=CTR
+    c.font=SM if el2=="Required" else BLUB
+    if el2!="Required": c.fill=YEL
     if i==0:
         q.cell(row=r,column=7,value="=C6*D6*12").font=INK
     else:
@@ -321,10 +433,10 @@ ANC=[("Basic life & AD&D","Yes","$50,000 flat",46.25,
      ("Short-term disability","No","60% to $1,500/wk, 7/14, 13 weeks",126.74,
       "Onyx's stated benefit design has STD employee-paid. Set to Yes to model Onyx funding it."),
     ]
-for i,(b,el,design,mon,note) in enumerate(ANC):
+for i,(b,el2,design,mon,note) in enumerate(ANC):
     r=15+i
     q.cell(row=r,column=1,value=b).font=INK
-    c=q.cell(row=r,column=2,value=el); c.font=BLUB; c.fill=YEL; c.alignment=CTR
+    c=q.cell(row=r,column=2,value=el2); c.font=BLUB; c.fill=YEL; c.alignment=CTR
     q.cell(row=r,column=3,value=design).font=SM
     c=q.cell(row=r,column=4,value=mon); c.font=BLUB; c.fill=YEL; c.number_format=CUR2
     c=q.cell(row=r,column=5,value=f'=IF($B{r}="Yes",$D{r}*12,0)'); c.font=INK; c.number_format=CUR
@@ -384,7 +496,7 @@ for col,w in [("A",30),("B",42),("C",30),("D",12),("E",12),("F",14),("G",16),("H
 q.sheet_view.showGridLines=False
 print("questco ok")
 
-# ================= 6. 401(k) =================
+# ================= 7. 401(k) =================
 k=wb.create_sheet("401(k)")
 k["A1"]="401(k) through Questco - match modelling"; k["A1"].font=TTL
 k["A2"]=("Questco charges $3.00 per participating employee per quarter and nothing to Onyx unless Onyx chooses to match. "
@@ -452,8 +564,8 @@ for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
     c=k.cell(row=r,column=10,value=f'=IF($C{r}<>"Yes",0,{NEL.format(r=r)})'); c.font=SM; c.number_format=CUR
     for col in range(1,11): k.cell(row=r,column=col).border=BOX
 K_LAST=K_FIRST+len(EMP)-1
-dvp=DataValidation(type="list",formula1='"Yes,No"',allow_blank=False,showDropDown=False)
-k.add_data_validation(dvp); dvp.add(f"C{K_FIRST}:C{K_LAST}")
+dvpk=DataValidation(type="list",formula1='"Yes,No"',allow_blank=False,showDropDown=False)
+k.add_data_validation(dvpk); dvpk.add(f"C{K_FIRST}:C{K_LAST}")
 r=K_LAST+1; K_TOT=r
 k.cell(row=r,column=1,value="TOTAL").font=BLD
 k.cell(row=r,column=2,value=f"=SUM(B{K_FIRST}:B{K_LAST})").font=BLD
@@ -527,33 +639,25 @@ for col,w in [("A",58),("B",16),("C",18),("D",62),("E",62),("F",18),("G",15),("H
 k.sheet_view.showGridLines=False
 print("401k ok  rows",K_FIRST,K_LAST,"| TOT",K_TOT,"| OPT",K_OPT,"| cost",K_COST)
 
-# ================= 7. COMBINED =================
+# ================= 8. COMBINED =================
 CB=wb.create_sheet("Combined")
-CT="'Cost by Tier'!"
 PLAN_A=f"{CT}$A${CT_FIRST}:$A${CT_LAST}"
-ONYX_K=f"{CT}$K${CT_FIRST}:$K${CT_LAST}"
-EMP_P=f"{CT}$P${CT_FIRST}:$P${CT_LAST}"
-WORST_O=f"{CT}$O${CT_FIRST}:$O${CT_LAST}"
-ENR_D=f"{CT}$D${CT_FIRST}:$D${CT_LAST}"
-QO="Questco!"; KO="'401(k)'!"
-NONMED_M=f"{QO}$F$6+{QO}$F$7+{QO}$F$8+{QO}$D$18+{KO}$B${K_COST}"
+ONYX_Y=f"{CT}$M${CT_FIRST}:$M${CT_LAST}"
+EMP_Y=f"{CT}$O${CT_FIRST}:$O${CT_LAST}"
+WORST_O=f"{CT}$S${CT_FIRST}:$S${CT_LAST}"
+ENR_D=f"{CT}$E${CT_FIRST}:$E${CT_LAST}"
+QO="Questco!"; KO="'401(k)'!"; EO="Elections!"
 NONMED_A=f"{QO}$G$6+{QO}$G$7+{QO}$G$8+{QO}$E$18+{KO}$C${K_COST}"
 
 CB["A1"]="Angle + Questco - monthly and annual projection"; CB["A1"].font=TTL
-CB["A2"]="Everything here recalculates from the Contributions, Questco and 401(k) tabs. Pick a plan below to drive the first two blocks."
+CB["A2"]="Block 1 reads the actual elections on the Elections tab. Block 3 shows what each plan would cost if every enrolled employee took it."
 CB["A2"].font=SUB
-CB["A4"]="SELECTED ANGLE PLAN"; CB["A4"].font=BLD
-c=CB["C4"]; c.value=ANGLE[0][0]; c.font=BLUB; c.fill=YEL
-dv3=DataValidation(type="list",formula1='"{}"'.format(",".join(r[0] for r in ANGLE)),
-                   allow_blank=False,showDropDown=False)
-CB.add_data_validation(dv3); dv3.add("C4")
-for col in range(1,4): CB.cell(row=4,column=col).border=BOX
 
-sec(CB,6,"1.  WHAT ONYX PAYS",6)
-hdr(CB,7,["Cost line","Vendor","Monthly","Annual","Note"])
+sec(CB,5,"1.  WHAT ONYX PAYS   (at the elections currently entered)",6)
+hdr(CB,6,["Cost line","Vendor","Monthly","Annual","Note"])
 LINES=[("Medical - employer contribution","Angle / CapFi",
-        f"=SUMIFS({ONYX_K},{PLAN_A},$C$4)/12",f"=SUMIFS({ONYX_K},{PLAN_A},$C$4)",
-        "Fixed dollars per tier. Does not move when an employee changes plans."),
+        f"={EO}$H${EL_TOT}",f"={EO}$K${EL_TOT}",
+        "From the Elections tab. On the percentage basis this moves with the plan each person elects."),
        ("Administrative fee","Questco",f"={QO}F6",f"={QO}G6","$117 per employee per month."),
        ("Workers' comp + EPLI","Questco",f"={QO}F7",f"={QO}G7","Subject to underwriting."),
        ("Cyber liability","Questco",f"={QO}F8",f"={QO}G8",
@@ -561,10 +665,10 @@ LINES=[("Medical - employer contribution","Angle / CapFi",
        ("Employer-paid ancillary","Questco",f"={QO}D18",f"={QO}E18",
         "Life, LTD and STD as elected on the Questco tab."),
        ("401(k) - employer cost","Questco",f"={KO}B{K_COST}",f"={KO}C{K_COST}",
-        "Match, plus participant fees only if Onyx absorbs them. Set the formula on the 401(k) tab."),
+        "Match, plus participant fees only if Onyx absorbs them. Match type defaults to None."),
       ]
 for i,(line,ven,mon,ann,note) in enumerate(LINES):
-    r=8+i
+    r=7+i
     CB.cell(row=r,column=1,value=line).font=INK
     CB.cell(row=r,column=2,value=ven).font=SM
     c=CB.cell(row=r,column=3,value=mon); c.font=INK; c.number_format=CUR2
@@ -572,61 +676,63 @@ for i,(line,ven,mon,ann,note) in enumerate(LINES):
     CB.cell(row=r,column=5,value=note).font=SM; CB.cell(row=r,column=5).alignment=WRAP
     CB.row_dimensions[r].height=28
     for col in range(1,6): CB.cell(row=r,column=col).border=BOX
-CB["A14"]="ONYX RECURRING TOTAL"; CB["A14"].font=BLD
-CB["C14"]="=SUM(C8:C13)"; CB["C14"].font=BLD; CB["C14"].number_format=CUR2
-CB["D14"]="=SUM(D8:D13)"; CB["D14"].font=BLD; CB["D14"].number_format=CUR
-CB["A15"]="Implementation (first year only)"; CB["A15"].font=INK
-CB["B15"]="Questco"; CB["B15"].font=SM
-CB["D15"]=f"={QO}G10"; CB["D15"].font=INK; CB["D15"].number_format=CUR
-CB["A16"]="ONYX FIRST-YEAR TOTAL"; CB["A16"].font=BLD
-CB["D16"]="=D14+D15"; CB["D16"].font=BLD; CB["D16"].number_format=CUR
-for r2 in (14,15,16):
+CB["A13"]="ONYX RECURRING TOTAL"; CB["A13"].font=BLD
+CB["C13"]="=SUM(C7:C12)"; CB["C13"].font=BLD; CB["C13"].number_format=CUR2
+CB["D13"]="=SUM(D7:D12)"; CB["D13"].font=BLD; CB["D13"].number_format=CUR
+CB["A14"]="Implementation (first year only)"; CB["A14"].font=INK
+CB["B14"]="Questco"; CB["B14"].font=SM
+CB["D14"]=f"={QO}G10"; CB["D14"].font=INK; CB["D14"].number_format=CUR
+CB["A15"]="ONYX FIRST-YEAR TOTAL"; CB["A15"].font=BLD
+CB["C15"]="=D15/12"; CB["C15"].font=BLD; CB["C15"].number_format=CUR2
+CB["D15"]="=D13+D14"; CB["D15"].font=BLD; CB["D15"].number_format=CUR
+for r2 in (13,14,15):
     for col in range(1,6): CB.cell(row=r2,column=col).border=BOX
-for r2 in (14,16):
+for r2 in (13,15):
     for col in range(1,6): CB.cell(row=r2,column=col).fill=TOTFILL
-CB["A17"]=("The 401(k) line is a MODELLED match, not a committed cost. At the default settings - safe harbor basic, everyone "
-           "deferring 6% - it is the largest line on this page after medical. Set Match type to None on the 401(k) tab to see Onyx's "
-           "cost without a match.")
-CB["A17"].font=Font(name=F,size=9,bold=True,italic=True,color="8E2F2A")
-CB["A18"]=("Payroll taxes of about $52,176 a year are NOT in this total. Onyx owes FICA, FUTA and SUTA whether or not there is a PEO, "
+CB["A16"]=("The 401(k) line is a MODELLED match, not a committed cost. Match type is set to None on the 401(k) tab, so it reads zero. "
+           "Block 3 of that tab prices the two safe harbor alternatives.")
+CB["A16"].font=Font(name=F,size=9,bold=True,italic=True,color="8E2F2A")
+CB["A17"]=("Payroll taxes of about $52,176 a year are NOT in this total. Onyx owes FICA, FUTA and SUTA whether or not there is a PEO, "
            "so they are a pass-through on the Questco invoice rather than a cost of the relationship. They are itemised on the Questco tab.")
-CB["A18"].font=SUB
+CB["A17"].font=SUB
+CB["A18"]="Employee + child(ren) is excluded from every figure on this tab. Its rates are kept on the Angle Plans and Cost by Tier tabs for the record."
+CB["A18"].font=GREYI
 
 sec(CB,20,"2.  WHAT THE EMPLOYEES PAY, AND THE COMBINED PICTURE",6)
 hdr(CB,21,["Line","Monthly","Annual","Note"])
-EL=[("Employee medical deductions, all enrolled",f"=SUMIFS({EMP_P},{PLAN_A},$C$4)/12",
-     f"=SUMIFS({EMP_P},{PLAN_A},$C$4)","Premium only. Pretax for everyone except Steven."),
-    ("Employee 401(k) deferrals",f"={KO}E{K_TOT}/12",f"={KO}E{K_TOT}",
-     "Their own savings, not a cost - shown so the payroll picture is complete."),
-    ("Employee 401(k) fees",f"=IF({KO}$C$8=\"Employer\",0,{KO}H{K_TOT}/12)",
-     f"=IF({KO}$C$8=\"Employer\",0,{KO}H{K_TOT})","$3 per quarter each while the fee sits on participants."),
-    ("Onyx + employees, medical premium only","=C8+B22","=D8+C22",
-     "The true cost of the Angle plan itself, both sides."),
-    ("Onyx + employees, all in","=C14+B22+B24","=D14+C22+C24",
-     "Adds the Questco fee, elected ancillary, the 401(k) and the participant fees."),
-    ("Combined worst case, one bad year","",
-     f"=D14+SUMPRODUCT(({PLAN_A}=$C$4)*{WORST_O}*{ENR_D})",
-     "Assumes every enrolled household hits its out-of-pocket maximum in the same year. A ceiling, not a forecast."),
-   ]
-for i,(line,mon,ann,note) in enumerate(EL):
+EL2=[("Employee medical deductions, all enrolled",f"={EO}$I${EL_TOT}",f"={EO}$L${EL_TOT}",
+      "From the Elections tab. Premium only. Pretax for everyone except Steven."),
+     ("Employee 401(k) deferrals",f"={KO}E{K_TOT}/12",f"={KO}E{K_TOT}",
+      "Their own savings, not a cost - shown so the payroll picture is complete."),
+     ("Employee 401(k) fees",f"=IF({KO}$C$8=\"Employer\",0,{KO}H{K_TOT}/12)",
+      f"=IF({KO}$C$8=\"Employer\",0,{KO}H{K_TOT})","$3 per quarter each while the fee sits on participants."),
+     ("Onyx + employees, medical premium only",f"={EO}$J${EL_TOT}",f"={EO}$M${EL_TOT}",
+      "The true cost of the Angle plan itself, both sides."),
+     ("Onyx + employees, all in","=C13+B22+B24","=D13+C22+C24",
+      "Adds the Questco fee, elected ancillary, the 401(k) and the participant fees."),
+     ("Combined worst case, one bad year","",
+      f"=D13+SUMPRODUCT(({PLAN_A}='Elections'!$E$7)*{WORST_O}*{ENR_D})",
+      "Assumes every enrolled household hits its out-of-pocket maximum in the same year, on the plan in the first Elections row. A ceiling, not a forecast."),
+    ]
+for i,(line,mon,ann,note) in enumerate(EL2):
     r=22+i
     CB.cell(row=r,column=1,value=line).font=BLD if i>=3 else INK
     if mon:
-        c=CB.cell(row=r,column=2,value=mon); c.font=INK; c.number_format=CUR2
+        c=CB.cell(row=r,column=2,value=mon); c.font=BLD if i>=3 else INK; c.number_format=CUR2
     c=CB.cell(row=r,column=3,value=ann); c.font=BLD if i>=3 else INK; c.number_format=CUR
     CB.cell(row=r,column=4,value=note).font=SM; CB.cell(row=r,column=4).alignment=WRAP
     CB.row_dimensions[r].height=28
     for col in range(1,5): CB.cell(row=r,column=col).border=BOX
 
-sec(CB,29,"3.  ALL THREE PLANS SIDE BY SIDE   (annual, at the current settings)",7)
+sec(CB,29,"3.  ALL THREE PLANS SIDE BY SIDE   (annual, if every enrolled employee took that one plan)",7)
 hdr(CB,30,["Angle plan","HSA","Onyx - medical","Onyx - all in","Employee medical","Onyx + employees","Combined worst case"])
 for i,row in enumerate(ANGLE):
     r=31+i
     CB.cell(row=r,column=1,value=row[0]).font=INK
     CB.cell(row=r,column=2,value=row[1]).font=INK; CB.cell(row=r,column=2).alignment=CTR
-    CB[f"C{r}"]=f"=SUMIFS({ONYX_K},{PLAN_A},$A{r})"
+    CB[f"C{r}"]=f"=SUMIFS({ONYX_Y},{PLAN_A},$A{r})"
     CB[f"D{r}"]=f"=C{r}+{NONMED_A}"
-    CB[f"E{r}"]=f"=SUMIFS({EMP_P},{PLAN_A},$A{r})"
+    CB[f"E{r}"]=f"=SUMIFS({EMP_Y},{PLAN_A},$A{r})"
     CB[f"F{r}"]=f'=D{r}+E{r}+IF({KO}$C$8="Employer",0,{KO}H{K_TOT})'
     CB[f"G{r}"]=f"=D{r}+SUMPRODUCT(({PLAN_A}=$A{r})*{WORST_O}*{ENR_D})"
     for col in "CDEFG":
@@ -635,9 +741,9 @@ for i,row in enumerate(ANGLE):
     for col in range(1,8): CB.cell(row=r,column=col).border=BOX
     if i%2:
         for col in range(1,8): CB.cell(row=r,column=col).fill=BAND
-CB["A35"]=("Onyx's medical column is the same across all three plans because the contribution is a fixed dollar amount and Angle's minimum "
-           "funding never binds at these settings. A richer plan costs Onyx nothing extra and costs the employee the whole difference. "
-           "Lower the contribution far enough on the Contributions tab and the minimum starts to bind - the check column there says so.")
+CB["A35"]=("On the percentage basis Onyx's medical cost RISES with the plan, because Onyx pays 50% of whatever the premium is. "
+           "Switch the basis to Fixed dollars on the Contributions tab and the column goes flat instead - Onyx pays the same on every "
+           "plan and the employee absorbs the whole difference.")
 CB["A35"].font=SUB
 CB["A36"]="Angle offers no dental or vision. Questco quotes both as employee-paid, so neither appears in Onyx's cost here."
 CB["A36"].font=SUB
@@ -646,8 +752,5 @@ for col,w in [("A",42),("B",18),("C",18),("D",18),("E",18),("F",20),("G",22)]:
 CB.sheet_view.showGridLines=False
 print("combined ok")
 
-import os
-for tmp in ("_stage1.xlsx","_stage2.xlsx","_stage3.xlsx","_head.py"):
-    if os.path.exists(tmp): os.remove(tmp)
 wb.save("Onyx_Angle_Questco_Cost_Model.xlsx")
 print("SAVED")
