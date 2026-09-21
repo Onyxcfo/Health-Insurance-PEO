@@ -299,7 +299,7 @@ el["A3"]="EDIT THE YELLOW CELLS. Enrolling? and tier come from the Contributions
 el["A3"].font=Font(name=F,size=10,bold=True,color="8E2F2A")
 sec(el,5,"FINAL PLAN SELECTION BY PERSON",13)
 hdr(el,6,["Employee","Enrolling?","Tier","Code","ELECTED PLAN","In totals?","Monthly premium",
-          "Onyx $/mo","Employee $/mo","Total $/mo","Onyx $/yr","Employee $/yr","Total $/yr"],h=40)
+          "Onyx $/mo","Employee $/mo","Total $/mo","Onyx $/yr","Employee $/yr","Total $/yr","Worst case $/yr (each)"],h=40)
 EL_FIRST=7
 for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
     r=EL_FIRST+i; m=KEYM.format(r=r)
@@ -317,10 +317,12 @@ for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
     c=el.cell(row=r,column=11,value=f"=$H{r}*12"); c.font=INK; c.number_format=CUR
     c=el.cell(row=r,column=12,value=f"=$I{r}*12"); c.font=INK; c.number_format=CUR
     c=el.cell(row=r,column=13,value=f"=$J{r}*12"); c.font=BLD; c.number_format=CUR
+    c=el.cell(row=r,column=14,value=f"={gate}INDEX({CT}$S${CT_FIRST}:$S${CT_LAST},{m}))")
+    c.font=INK; c.number_format=CUR
     el.row_dimensions[r].height=22
-    for col in range(1,14): el.cell(row=r,column=col).border=BOX
+    for col in range(1,15): el.cell(row=r,column=col).border=BOX
     if yn!="Yes":
-        for col in range(1,14): el.cell(row=r,column=col).fill=BAND
+        for col in range(1,15): el.cell(row=r,column=col).fill=BAND
         el.cell(row=r,column=5).fill=YEL
 EL_LAST=EL_FIRST+len(EMP)-1
 dvp=DataValidation(type="list",formula1='"{}"'.format(",".join(x[0] for x in ANGLE)),
@@ -329,10 +331,10 @@ el.add_data_validation(dvp); dvp.add(f"E{EL_FIRST}:E{EL_LAST}")
 EL_TOT=EL_LAST+1
 el.cell(row=EL_TOT,column=1,value="TOTAL - ONYX AND EMPLOYEES").font=BLD
 c=el.cell(row=EL_TOT,column=2,value=f'=COUNTIF(B{EL_FIRST}:B{EL_LAST},"Yes")&" enrolled"'); c.font=BLD; c.alignment=CTR
-for col,letter,fmt in ((8,"H",CUR2),(9,"I",CUR2),(10,"J",CUR2),(11,"K",CUR),(12,"L",CUR),(13,"M",CUR)):
+for col,letter,fmt in ((8,"H",CUR2),(9,"I",CUR2),(10,"J",CUR2),(11,"K",CUR),(12,"L",CUR),(13,"M",CUR),(14,"N",CUR)):
     c=el.cell(row=EL_TOT,column=col,value=f"=SUM({letter}{EL_FIRST}:{letter}{EL_LAST})")
     c.font=BLD; c.number_format=fmt
-for col in range(1,14):
+for col in range(1,15):
     el.cell(row=EL_TOT,column=col).border=BOX; el.cell(row=EL_TOT,column=col).fill=TOTFILL
 el.cell(row=EL_TOT+2,column=1,value="ONYX - MONTHLY").font=BLD
 c=el.cell(row=EL_TOT+2,column=3,value=f"=$H${EL_TOT}"); c.font=BLD; c.number_format=CUR2
@@ -351,6 +353,10 @@ el.cell(row=EL_TOT+7,column=1,value=(
   "displays so the record is complete.")).font=SUB
 el.cell(row=EL_TOT+8,column=1,value=(
   "Everyone defaults to the HDHP 3400/5000. Change the ELECTED PLAN cells as people choose; nothing else needs touching.")).font=SUB
+el.cell(row=EL_TOT+9,column=1,value=(
+  "Worst case = that person's annual premium share plus their household's in-network out-of-pocket maximum, on the plan they elected. "
+  "Premiums never count toward an out-of-pocket maximum, so the two add without overlapping. The Combined tab reads the TOTAL of "
+  "this column.")).font=SUB
 
 # --- saved scenarios: name a column, type a percentage per person, read the totals ---
 SC_NAME=23+2; SC_SUB=SC_NAME+1; SC_FIRST=SC_SUB+1
@@ -428,7 +434,7 @@ el.cell(row=SC_DE+3,column=1,value=(
 el.cell(row=SC_DE+4,column=1,value=(
   "Scenario 1 is the baseline the two change rows measure against. Overwrite any column's name and percentages to try something else.")).font=SUB
 
-for col,w in [("A",30),("B",13),("C",21),("D",13),("E",24),("F",11),("G",16),("H",14),("I",16),("J",14),("K",14),("L",16),("M",14)]:
+for col,w in [("A",30),("B",13),("C",21),("D",13),("E",24),("F",11),("G",16),("H",14),("I",16),("J",14),("K",14),("L",16),("M",14),("N",20)]:
     el.column_dimensions[col].width=w
 el.freeze_panes="F7"; el.sheet_view.showGridLines=False
 print("elections ok", EL_FIRST, EL_LAST, EL_TOT)
@@ -803,8 +809,8 @@ EL2=[("Employee medical deductions, all enrolled",f"={EO}$I${EL_TOT}",f"={EO}$L$
      ("Onyx + employees, all in","=C13+B22+B24","=D13+C22+C24",
       "Adds the Questco fee, elected ancillary, the 401(k) and the participant fees."),
      ("Combined worst case, one bad year","",
-      f"=D13+SUMPRODUCT(({PLAN_A}='Elections'!$E$7)*{WORST_O}*{ENR_D})",
-      "Assumes every enrolled household hits its out-of-pocket maximum in the same year, on the plan in the first Elections row. A ceiling, not a forecast."),
+      f"=D13+{EO}$N${EL_TOT}",
+      "Each enrolled household on the plan it actually elected, all hitting their out-of-pocket maximum in the same year. A ceiling, not a forecast."),
     ]
 for i,(line,mon,ann,note) in enumerate(EL2):
     r=22+i
