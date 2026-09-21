@@ -210,8 +210,9 @@ hdr(c3,4,["Plan","Tier","Code","In totals?","Enrolled","Monthly premium","Onyx c
           "Onyx pays $/mo (each)","Employee pays $/mo (each)","Onyx share","Onyx $/mo (all enrolled)","Onyx $/yr (all enrolled)",
           "Employee $/mo (all in tier)","Employee $/yr (all in tier)","Employee $/yr (each)",
           "Deductible","OOP max","Worst case $/yr (each)"],h=48)
-r=5; CT_FIRST=5
+r=5; CT_FIRST=5; CT_TOTROWS=[]
 for pi,row in enumerate(ANGLE):
+    grp_first=r
     for tname,tcode,_t,_inc in TIERS:
         c3.cell(row=r,column=1,value=row[0]).font=INK
         c3.cell(row=r,column=2,value=tname).font=INK
@@ -253,11 +254,26 @@ for pi,row in enumerate(ANGLE):
         elif tcode in ("ES","FAM"):
             for col in range(1,20): c3.cell(row=r,column=col).fill=BAND
         r+=1
-CT_LAST=r-1
-c3.cell(row=CT_LAST+2,column=1,
+    grp_last=r-1
+    CT_TOTROWS.append(r)
+    c3.cell(row=r,column=1,value=row[0]+"  -  TOTAL").font=BLD
+    c3.cell(row=r,column=2,value="All tiers counted in totals").font=SM
+    c=c3.cell(row=r,column=5,value=f"=SUM(E{grp_first}:E{grp_last})"); c.font=BLD; c.alignment=CTR
+    for col,letter,fmt in ((12,"L",CUR2),(13,"M",CUR),(14,"N",CUR2),(15,"O",CUR)):
+        c=c3.cell(row=r,column=col,value=f"=SUM({letter}{grp_first}:{letter}{grp_last})")
+        c.font=BLD; c.number_format=fmt
+    c=c3.cell(row=r,column=19,value=f"=SUMPRODUCT($S{grp_first}:$S{grp_last},$E{grp_first}:$E{grp_last})")
+    c.font=BLD; c.number_format=CUR
+    c3.cell(row=r,column=20,value="TOTAL ROW - not a lookup key").font=SM
+    for col in range(1,20):
+        c3.cell(row=r,column=col).border=BOX; c3.cell(row=r,column=col).fill=TOTFILL
+    c3.row_dimensions[r].height=20
+    r+=2
+CT_LAST=CT_TOTROWS[-1]
+c3.cell(row=CT_LAST+3,column=1,
   value=("HSA funding is deliberately not modeled. On the HDHP 3400/5000 an employee can pay part of that worst case with pretax "
          "dollars, so the real cost is lower - but by an amount only the employee controls.")).font=SUB
-c3.cell(row=CT_LAST+3,column=1,
+c3.cell(row=CT_LAST+4,column=1,
   value=("The 'all enrolled' and 'all in tier' columns multiply by how many people sit in that tier, so they sum to the whole spend "
          "IF every enrolled employee took that one plan. Actual elections are on the Elections tab.")).font=SUB
 c3.cell(row=4,column=20,value="Row key").font=HDF
@@ -267,7 +283,6 @@ for col,w in [("A",24),("B",21),("C",7),("D",11),("E",10),("F",14),("G",16),("H"
     c3.column_dimensions[col].width=w
 c3.column_dimensions["T"].width=30; c3.column_dimensions["T"].hidden=True
 c3.freeze_panes="D5"; c3.sheet_view.showGridLines=False
-c3.auto_filter.ref=f"A4:S{CT_LAST}"
 wb.defined_names.add(openpyxl.workbook.defined_name.DefinedName(
     "CostKey", attr_text=f"'Cost by Tier'!$T${CT_FIRST}:$T${CT_LAST}"))
 CT="'Cost by Tier'!"
