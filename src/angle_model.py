@@ -351,7 +351,84 @@ el.cell(row=EL_TOT+7,column=1,value=(
   "displays so the record is complete.")).font=SUB
 el.cell(row=EL_TOT+8,column=1,value=(
   "Everyone defaults to the HDHP 3400/5000. Change the ELECTED PLAN cells as people choose; nothing else needs touching.")).font=SUB
-for col,w in [("A",30),("B",13),("C",21),("D",8),("E",24),("F",11),("G",16),("H",14),("I",16),("J",14),("K",14),("L",16),("M",14)]:
+
+# --- saved scenarios: name a column, type a percentage per person, read the totals ---
+SC_NAME=23+2; SC_SUB=SC_NAME+1; SC_FIRST=SC_SUB+1
+SC_LAST=SC_FIRST+len(EMP)-1
+SC_ONM=SC_LAST+1; SC_ONY=SC_ONM+1; SC_EEM=SC_ONY+1; SC_EEY=SC_EEM+1
+SC_DO=SC_EEY+1; SC_DE=SC_DO+1
+PAIRS=[("E","F"),("G","H"),("I","J"),("K","L")]
+SCEN=[("1.  Current - 50% all",   {}),
+      ("2.  Christine at 55%",    {"Christine Johnson":0.55}),
+      ("3.  (name this one)",     {}),
+      ("4.  (name this one)",     {})]
+PREMTOT=(f'SUMPRODUCT(($B${EL_FIRST}:$B${EL_LAST}="Yes")*($F${EL_FIRST}:$F${EL_LAST}="Yes")'
+         f'*$G${EL_FIRST}:$G${EL_LAST})')
+
+sec(el,23,"SAVED SCENARIOS   <- name a column, type a percentage for each person, read the totals",12)
+el.cell(row=24,column=1,value=(
+  "A scratchpad. Nothing here feeds the Combined tab - it is only for comparing. Everyone's plan, tier and enrolment come from the "
+  "table above, so the only thing that changes between columns is the percentage Onyx funds.")).font=SUB
+el.cell(row=SC_NAME,column=1,value="SCENARIO").font=HDF
+el.cell(row=SC_NAME,column=1).fill=HFILL; el.cell(row=SC_NAME,column=1).border=BOX
+el.cell(row=SC_NAME,column=1).alignment=CTR
+for ci,(pc,dc) in enumerate(PAIRS):
+    el.merge_cells(f"{pc}{SC_NAME}:{dc}{SC_NAME}")
+    c=el[f"{pc}{SC_NAME}"]; c.value=SCEN[ci][0]; c.font=BLUB; c.fill=YEL
+    c.alignment=Alignment(horizontal="center",vertical="center")
+    for col in (pc,dc): el[f"{col}{SC_NAME}"].border=BOX
+el.row_dimensions[SC_NAME].height=22
+hdr(el,SC_SUB,["Employee","Code","Elected plan","Premium $/mo"],h=32)
+for pc,dc in PAIRS:
+    for col,lab in ((pc,"Onyx %"),(dc,"Onyx $/mo")):
+        c=el[f"{col}{SC_SUB}"]; c.value=lab; c.font=HDF; c.fill=HFILL; c.border=BOX
+        c.alignment=Alignment(horizontal="center",vertical="center",wrap_text=True)
+for i,(n,pay,tier,code,yn,_note) in enumerate(EMP):
+    r=SC_FIRST+i; u=EL_FIRST+i
+    gate=f'IF(OR($B${u}<>"Yes",$F${u}<>"Yes"),0,'
+    c=el.cell(row=r,column=1,value=f"=$A${u}"); c.font=GRN
+    c=el.cell(row=r,column=2,value=f"=$D${u}"); c.font=GRN; c.alignment=CTR
+    c=el.cell(row=r,column=3,value=f"=$E${u}"); c.font=GRN
+    c=el.cell(row=r,column=4,value=f"=$G${u}"); c.font=GRN; c.number_format=CUR2
+    for ci,(pc,dc) in enumerate(PAIRS):
+        c=el[f"{pc}{r}"]; c.value=SCEN[ci][1].get(n,PCT_DEFAULT)
+        c.font=BLUB; c.fill=YEL; c.number_format=PCT
+        c=el[f"{dc}{r}"]
+        c.value=f"={gate}MIN($D{r},MAX({pc}{r}*$D{r},{MINCELL})))"
+        c.font=INK; c.number_format=CUR2
+    for col in range(1,13): el.cell(row=r,column=col).border=BOX
+    if yn!="Yes":
+        for col in range(1,13): el.cell(row=r,column=col).fill=BAND
+        for pc,_dc in PAIRS: el[f"{pc}{r}"].fill=YEL
+for lab,rr,bold in (("ONYX - MONTHLY",SC_ONM,True),("ONYX - ANNUAL",SC_ONY,True),
+                    ("Employees - monthly",SC_EEM,False),("Employees - annual",SC_EEY,False),
+                    ("Change to ONYX $/yr vs Scenario 1",SC_DO,True),
+                    ("Change to employees $/yr vs Scenario 1",SC_DE,False)):
+    el.cell(row=rr,column=1,value=lab).font=BLD if bold else INK
+    for pc,dc in PAIRS:
+        c=el[f"{dc}{rr}"]
+        if rr==SC_ONM: c.value=f"=SUM({dc}{SC_FIRST}:{dc}{SC_LAST})"; c.number_format=CUR2
+        elif rr==SC_ONY: c.value=f"={dc}{SC_ONM}*12"; c.number_format=CUR
+        elif rr==SC_EEM: c.value=f"={PREMTOT}-{dc}{SC_ONM}"; c.number_format=CUR2
+        elif rr==SC_EEY: c.value=f"={dc}{SC_EEM}*12"; c.number_format=CUR
+        elif rr==SC_DO: c.value=f"={dc}{SC_ONY}-$F${SC_ONY}"; c.number_format=CUR
+        else: c.value=f"={dc}{SC_EEY}-$F${SC_EEY}"; c.number_format=CUR
+        c.font=BLD if bold else INK
+    for col in range(1,13): el.cell(row=rr,column=col).border=BOX
+    if rr in (SC_ONM,SC_ONY,SC_DO):
+        for col in range(1,13): el.cell(row=rr,column=col).fill=TOTFILL
+el.cell(row=SC_DE+2,column=1,value=(
+  f'=IF($H${SC_DO}=0,"Scenario 2 costs Onyx exactly what Scenario 1 does.",'
+  f'"Scenario 2 costs Onyx "&TEXT(ABS($H${SC_DO}),"$#,##0")&IF($H${SC_DO}>0," MORE"," LESS")&'
+  f'" a year than Scenario 1 - and moves that same amount "&IF($H${SC_DO}>0,"off","onto")&" the employees.")')
+  ).font=Font(name=F,size=11,bold=True,color="1D5B72")
+el.cell(row=SC_DE+3,column=1,value=(
+  "Onyx never pays less than Angle's minimum funding, so a percentage low enough to fall under it gets topped up automatically - "
+  "which is why the totals stop falling below a floor.")).font=SUB
+el.cell(row=SC_DE+4,column=1,value=(
+  "Scenario 1 is the baseline the two change rows measure against. Overwrite any column's name and percentages to try something else.")).font=SUB
+
+for col,w in [("A",30),("B",13),("C",21),("D",13),("E",24),("F",11),("G",16),("H",14),("I",16),("J",14),("K",14),("L",16),("M",14)]:
     el.column_dimensions[col].width=w
 el.freeze_panes="F7"; el.sheet_view.showGridLines=False
 print("elections ok", EL_FIRST, EL_LAST, EL_TOT)
